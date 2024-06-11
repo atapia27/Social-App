@@ -1,41 +1,74 @@
-/*
-Create a slice for comments. The slice should have the following properties, in alignment with prisma schema:
-model Comment {
-  id      String @id @default(cuid())
-  content String
-  video   Video  @relation(fields: [videoId], references: [id])
-  videoId String
-}
- */
-
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from '../store';
-
-interface Comment {
-  id: string;
-  content: string;
-  videoId: string;
-}
+import { AppThunk } from '../store';
+import { CommentSchema } from '../../models/schemas';
+import { Dispatch } from 'redux';
 
 interface CommentState {
-  comments: Comment[];
+  comments: CommentSchema[];
+  loading: boolean;
+  error: string | null;
 }
 
 const initialState: CommentState = {
   comments: [],
+  loading: false,
+  error: null,
 };
 
 const commentSlice = createSlice({
   name: 'comments',
   initialState,
   reducers: {
-    addComment: (state, action: PayloadAction<Comment>) => {
+    fetchCommentsStart(state) {
+      state.loading = true;
+      state.error = null;
+    },
+    fetchCommentsSuccess(state, action: PayloadAction<CommentSchema[]>) {
+      state.comments = action.payload;
+      state.loading = false;
+    },
+    fetchCommentsFailure(state, action: PayloadAction<string>) {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    addComment(state, action: PayloadAction<CommentSchema>) {
       state.comments.push(action.payload);
     },
   },
 });
 
-export const { addComment } = commentSlice.actions;
+export const {
+  fetchCommentsStart,
+  fetchCommentsSuccess,
+  fetchCommentsFailure,
+  addComment,
+} = commentSlice.actions;
+
 export default commentSlice.reducer;
 
-export const selectComments = (state: RootState) => state.comments.comments;
+export const fetchComments = (video_id: string): AppThunk => async (dispatch) => {
+  dispatch(fetchCommentsStart());
+  try {
+    const response = await fetch(`/api/videos/comments?video_id=${video_id}`);
+    const data: CommentSchema[] = await response.json();
+    dispatch(fetchCommentsSuccess(data));
+  } catch (err: any) {
+    dispatch(fetchCommentsFailure(err.toString()));
+  }
+};
+
+export const createComment = (comment: CommentSchema): AppThunk => async (dispatch) => {
+  try {
+    const response = await fetch('/api/videos/comments', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(comment),
+    });
+    const newComment: CommentSchema = await response.json();
+    dispatch(addComment(newComment));
+  } catch (err: any) {
+    console.error(err);
+  }
+};

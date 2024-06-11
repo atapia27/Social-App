@@ -1,13 +1,27 @@
-import { FC } from 'react';
+import React from 'react';
 import VideoPost from './VideoPost';
 
-const VideoFeed: FC = () => {
+const VideoFeed: React.FC = () => {
   return (
-    <div className="space-y-6">
-      {/* Placeholder Video Posts */}
-      <VideoPost />
-      <VideoPost />
-      <VideoPost />
+    <div className="container mx-auto py-8">
+      <h1 className="text-3xl font-bold mb-8">Video Feed</h1>
+      <div className="grid gap-8 xl:grid-cols-1">
+        <VideoPost
+          title="Cafe"
+          description="Cafe LoFi"
+          videoUrl="https://www.youtube.com/embed/OO2kPK5-qno"
+        />
+        <VideoPost
+          title="BMO"
+          description="BMO LoFi"
+          videoUrl="https://www.youtube.com/embed/Ah7i5EFVDqA"
+        />
+        <VideoPost
+          title="BMO"
+          description="BMO LoFi"
+          videoUrl="https://www.youtube.com/embed/Ah7i5EFVDqA"
+        />
+      </div>
     </div>
   );
 };

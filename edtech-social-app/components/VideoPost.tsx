@@ -1,34 +1,41 @@
-import { FC } from 'react';
+import React from 'react';
 import { FiThumbsUp, FiMessageSquare, FiShare } from 'react-icons/fi';
 
-const VideoPost: FC = () => {
+interface VideoPostProps {
+  title: string;
+  description: string;
+  videoUrl: string;
+}
+
+const VideoPost: React.FC<VideoPostProps> = ({ title, description, videoUrl }) => {
   return (
-    <div className="bg-white shadow rounded-lg p-4">
-      <div className="mb-2">
-        <video controls className="w-full h-auto rounded">
-          <source src="path/to/video.mp4" type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
+    <div className="mx-auto w-[48rem] mb-8 bg-white rounded-lg shadow-md">
+      <div className="relative">
+        <iframe
+          className="w-full rounded-t-lg"
+          height="315"
+          src={videoUrl}
+          title={title}
+          allowFullScreen
+        ></iframe>
       </div>
-      <div className="flex justify-between items-center mb-2">
-        <h3 className="text-lg font-semibold">Video Title</h3>
-        <div className="flex space-x-2">
-          <button className="flex items-center space-x-1 text-blue-600">
-            <FiThumbsUp />
-            <span>Like</span>
+      <div className="p-4">
+        <h2 className="text-lg font-semibold">{title}</h2>
+        <p className="text-sm text-gray-600">{description}</p>
+        <div className="border-t border-gray-200 mt-2 pt-2 px-14 flex items-center justify-between text-sm">
+          <button className="flex items-center text-gray-500">
+            <FiThumbsUp className="mr-1" />
+            Like
           </button>
-          <button className="flex items-center space-x-1 text-blue-600">
-            <FiMessageSquare />
-            <span>Comment</span>
+          <button className="flex items-center ml-4 text-gray-500">
+            <FiMessageSquare className="mr-1" />
+            Comment
           </button>
-          <button className="flex items-center space-x-1 text-blue-600">
-            <FiShare />
-            <span>Share</span>
+          <button className="flex items-center ml-4 text-gray-500">
+            <FiShare className="mr-1" />
+            Share
           </button>
         </div>
-      </div>
-      <div>
-        <p>Comments will be displayed here...</p>
       </div>
     </div>
   );

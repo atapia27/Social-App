@@ -1,13 +1,20 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import videoReducer from './slices/videoSlice';
-import commentsReducer from './slices/commentSlice';
+import commentReducer from './slices/commentSlice';
 
 export const store = configureStore({
   reducer: {
     videos: videoReducer,
-    comments: commentsReducer,
+    comments: commentReducer,
   },
 });
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+
+export type AppThunk<ReturnType = void> = ThunkAction<
+  ReturnType,
+  RootState,
+  unknown,
+  Action<string>
+>;
