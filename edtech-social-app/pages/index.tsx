@@ -1,7 +1,6 @@
 // pages/index.tsx
 
 import type { NextPage } from 'next';
-import Navbar from '../components/Navbar';
 import VideoFeed from '../components/VideoFeed';
 
 const Home: NextPage = () => {

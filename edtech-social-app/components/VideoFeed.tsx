@@ -1,10 +1,10 @@
+// VideoFeed.tsx
 import React from 'react';
 import VideoPost from './VideoPost';
 
 const VideoFeed: React.FC = () => {
   return (
     <div className="container mx-auto py-8">
-      <h1 className="text-3xl font-bold mb-8">Video Feed</h1>
       <div className="grid gap-8 xl:grid-cols-1">
         <VideoPost
           title="Cafe"

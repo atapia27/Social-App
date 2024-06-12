@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppThunk } from '../store';
 import { VideoSchema, EditVideo } from '../../models/schemas';
-import { Dispatch } from 'redux';
 
 interface VideoState {
   videos: VideoSchema[];
