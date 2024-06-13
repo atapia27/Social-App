@@ -59,14 +59,14 @@ const CreateVideoForm: React.FC<CreateVideoFormProps> = ({ onCreate }) => {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           placeholder='Enter video description'
-          className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+          className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 resize-none"
           required
         />
       </div>
       <div className="flex justify-center border-t border-gray-200 mt-2 pt-2 items-center text-sm">
         <button
           type="submit"
-          className=" w-1/5 flex items-center justify-center px-4 text-gray-500 rounded-md hover:bg-[#f8961e60] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          className=" w-1/5 flex items-center justify-center px-4 text-gray-500 rounded-md hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
         >
           <FiCornerDownRight className="mr-2" />
           Post

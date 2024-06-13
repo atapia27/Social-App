@@ -41,7 +41,7 @@ const CommentForm: React.FC<Props> = ({ videoId }) => {
         value={content}
         onChange={(e) => setContent(e.target.value)}
         placeholder="Write a comment..."
-        className=" w-full p-2 border border-gray-300 rounded"
+        className=" w-full p-2 border border-gray-300 rounded resize-none"
       />
       <button
         type="submit"

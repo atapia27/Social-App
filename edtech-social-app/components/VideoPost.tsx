@@ -30,19 +30,19 @@ const VideoPost: React.FC<VideoPostProps> = ({ title, description, videoUrl }) =
         <h2 className="text-lg font-semibold">{title}</h2>
         <p className="text-sm text-gray-600">{description}</p>
         {showCommentForm && <CommentForm videoId='video123'/>}
-        <div className="border-t border-gray-200 mt-2 pt-2 px-14 flex items-center justify-between text-sm">
-          <button className="flex items-center text-gray-500">
+        <div className="border-t border-gray-200 mt-2 pt-2 px-14 flex items-center justify-between text-sm ">
+          <button className="flex items-center text-gray-500 hover:text-gray-700">
             <FiThumbsUp className="mr-1" />
             Like
           </button>
           <button
-            className="flex items-center ml-4 text-gray-500"
+            className="flex items-center ml-4 text-gray-500 hover:text-gray-700"
             onClick={toggleCommentForm}
           >
             <FiMessageSquare className="mr-1" />
             Comment
           </button>
-          <button className="flex items-center ml-4 text-gray-500">
+          <button className="flex items-center ml-4 text-gray-500 hover:text-gray-700">
             <FiShare className="mr-1" />
             Share
           </button>
