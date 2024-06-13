@@ -4,8 +4,8 @@ import { FiHome, FiUsers, FiBell, FiMessageCircle, FiSettings } from 'react-icon
 
 const Navbar: FC = () => {
   return (
-    <nav className="bg-[#FD9B63] text-white p-4 flex justify-between items-center h-14 sticky top-0 z-50">
-      <div className='w-40'>
+    <nav className="bg-[#FD9B63] text-white p-4 flex justify-between items-center h-14 sticky top-0 z-50 align-middle">
+      <div className=''>
       <img src='/FULL_LOGO_COLOR.png' alt="Logo" className="h-8" />
       </div>
       <div className="flex space-x-20 text-xl">
@@ -22,7 +22,7 @@ const Navbar: FC = () => {
           <FiMessageCircle />
         </Link>
       </div>
-      <div className="flex items-center space-x-4 text-sm w-40">
+      <div className="flex items-center space-x-4 text-sm ">
         <img src="/DogPFP.png" alt="Profile" className="w-8 h-8 rounded-full" />
         <span>Username</span>
         <FiSettings className="w-6 h-6" />
