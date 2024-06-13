@@ -1,3 +1,4 @@
+//VideoPost.tsx
 import React from 'react';
 import { FiThumbsUp, FiMessageSquare, FiShare } from 'react-icons/fi';
 
@@ -9,7 +10,7 @@ interface VideoPostProps {
 
 const VideoPost: React.FC<VideoPostProps> = ({ title, description, videoUrl }) => {
   return (
-    <div className="mx-auto w-[48rem] mb-8 bg-white rounded-lg shadow-md">
+    <div className="mx-auto w-[55%] mb-8 bg-white rounded-lg shadow-md">
       <div className="relative">
         <iframe
           className="w-full rounded-t-lg"
