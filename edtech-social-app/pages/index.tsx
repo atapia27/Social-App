@@ -1,7 +1,7 @@
 // pages/index.tsx
 
-import type { NextPage } from 'next';
-import VideoFeed from '../components/VideoFeed';
+import type { NextPage } from "next";
+import VideoFeed from "../components/VideoFeed";
 
 const Home: NextPage = () => {
   return (

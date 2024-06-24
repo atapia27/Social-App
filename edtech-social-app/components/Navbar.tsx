@@ -1,12 +1,18 @@
-import { FC } from 'react';
-import Link from 'next/link';
-import { FiHome, FiUsers, FiBell, FiMessageCircle, FiSettings } from 'react-icons/fi';
+import { FC } from "react";
+import Link from "next/link";
+import {
+  FiHome,
+  FiUsers,
+  FiBell,
+  FiMessageCircle,
+  FiSettings,
+} from "react-icons/fi";
 
 const Navbar: FC = () => {
   return (
     <nav className="bg-[#FD9B63] text-white p-4 flex justify-between items-center h-14 sticky top-0 z-50 align-middle">
-      <div className=''>
-      <img src='/FULL_LOGO_COLOR.png' alt="Logo" className="h-8" />
+      <div className="">
+        <img src="/FULL_LOGO_COLOR.png" alt="Logo" className="h-8" />
       </div>
       <div className="flex space-x-20 text-xl">
         <Link href="/" className="flex items-center space-x-1">

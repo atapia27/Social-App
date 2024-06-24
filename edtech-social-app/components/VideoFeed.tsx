@@ -1,30 +1,33 @@
-import React, { useState } from 'react';
-import VideoPost from './VideoPost';
-import CreateVideoForm from './CreateVideoForm';
+import React, { useState } from "react";
+import VideoPost from "./VideoPost";
+import CreateVideoForm from "./CreateVideoForm";
 
 const VideoFeed: React.FC = () => {
-  
   const [videos, setVideos] = useState([
     {
-      video_id: '1',
-      user_id: 'user_me',
-      title: 'Cafe',
-      description: 'Cafe LoFi',
-      videoUrl: 'https://www.youtube.com/embed/OO2kPK5-qno',
+      video_id: "1",
+      user_id: "user_me",
+      title: "Cafe",
+      description: "Cafe LoFi",
+      videoUrl: "https://www.youtube.com/embed/OO2kPK5-qno",
     },
     {
-      video_id: '2',
-      user_id: 'user_me',
-      title: 'BMO',
-      description: 'BMO LoFi',
-      videoUrl: 'https://www.youtube.com/embed/Ah7i5EFVDqA',
+      video_id: "2",
+      user_id: "user_me",
+      title: "BMO",
+      description: "BMO LoFi",
+      videoUrl: "https://www.youtube.com/embed/Ah7i5EFVDqA",
     },
   ]);
 
-  const handleCreateVideo = (title: string, description: string, videoUrl: string) => {
+  const handleCreateVideo = (
+    title: string,
+    description: string,
+    videoUrl: string
+  ) => {
     const newVideo = {
       video_id: String(videos.length + 1),
-      user_id: 'user_me',
+      user_id: "user_me",
       title,
       description,
       videoUrl,

@@ -1,5 +1,5 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { PrismaClient } from '@prisma/client';
+import { NextApiRequest, NextApiResponse } from "next";
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -13,7 +13,7 @@ const getComments = async (req: NextApiRequest, res: NextApiResponse) => {
     });
     res.status(200).json(comments);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch comments' });
+    res.status(500).json({ error: "Failed to fetch comments" });
   }
 };
 
@@ -31,20 +31,20 @@ const createComment = async (req: NextApiRequest, res: NextApiResponse) => {
     });
     res.status(201).json(newComment);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to create comment' });
+    res.status(500).json({ error: "Failed to create comment" });
   }
 };
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   switch (req.method) {
-    case 'GET':
+    case "GET":
       await getComments(req, res);
       break;
-    case 'POST':
+    case "POST":
       await createComment(req, res);
       break;
     default:
-      res.setHeader('Allow', ['GET', 'POST']);
+      res.setHeader("Allow", ["GET", "POST"]);
       res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 };

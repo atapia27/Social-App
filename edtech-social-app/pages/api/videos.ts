@@ -1,5 +1,5 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { PrismaClient } from '@prisma/client';
+import { NextApiRequest, NextApiResponse } from "next";
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -13,7 +13,7 @@ const getVideos = async (req: NextApiRequest, res: NextApiResponse) => {
     });
     res.status(200).json(videos);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch videos' });
+    res.status(500).json({ error: "Failed to fetch videos" });
   }
 };
 
@@ -32,7 +32,7 @@ const createVideo = async (req: NextApiRequest, res: NextApiResponse) => {
     });
     res.status(201).json(newVideo);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to create video' });
+    res.status(500).json({ error: "Failed to create video" });
   }
 };
 
@@ -50,23 +50,23 @@ const updateVideo = async (req: NextApiRequest, res: NextApiResponse) => {
     });
     res.status(200).json(updatedVideo);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to update video' });
+    res.status(500).json({ error: "Failed to update video" });
   }
 };
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   switch (req.method) {
-    case 'GET':
+    case "GET":
       await getVideos(req, res);
       break;
-    case 'POST':
+    case "POST":
       await createVideo(req, res);
       break;
-    case 'PUT':
+    case "PUT":
       await updateVideo(req, res);
       break;
     default:
-      res.setHeader('Allow', ['GET', 'POST', 'PUT']);
+      res.setHeader("Allow", ["GET", "POST", "PUT"]);
       res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 };
