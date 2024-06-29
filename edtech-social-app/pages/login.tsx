@@ -22,11 +22,11 @@ const Login = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const response = await fetch('/api/createUser', {
+    const response = await fetch('http://localhost:8000/users/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-      },    
+      },
       body: JSON.stringify({ email, username, icon }),
     });
 

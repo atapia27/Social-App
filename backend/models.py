@@ -1,36 +1,33 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
+from sqlalchemy import Integer, Column, ForeignKey, String
 from sqlalchemy.orm import relationship
+from database import Base
 
-from .database import Base
 
+class User(Base):
+    __tablename__ = 'User'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    email = Column(String, unique=True)
+    username = Column(String, unique=True)
+    icon = Column(String)
 
 class Video(Base):
-    __tablename__ = "videos"
+    __tablename__ = "Video"  # Capital 'V' to match the actual table name
 
-    id = Column(String, primary_key=True)
-    user_id = Column(String, ForeignKey("users.id"))
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, ForeignKey("User.id"))  # Match the case for "User.id"
     description = Column(String)
     video_url = Column(String)
     title = Column(String)
 
     comments = relationship("Comment", back_populates="video")
 
-
 class Comment(Base):
-    __tablename__ = "comments"
+    __tablename__ = "Comment"  # Capital 'C' to match the actual table name
 
-    id = Column(String, primary_key=True)
-    video_id = Column(String, ForeignKey("videos.id"))
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    video_id = Column(Integer, ForeignKey("Video.id"))  # Match the case for "Video.id"
     content = Column(String)
-    user_id = Column(String)
+    user_id = Column(Integer)
 
     video = relationship("Video", back_populates="comments")
 
-
-class User(Base):
-    __tablename__ = "users"
-
-    id = Column(String, primary_key=True)
-    email = Column(String, unique=True)
-    username = Column(String, unique=True)
-    icon = Column(String)
