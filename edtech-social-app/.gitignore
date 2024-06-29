@@ -86,3 +86,17 @@ alembic/versions/*
 
 # pytest
 .pytest_cache/
+
+# Alembic files
+/backend/alembic.ini
+/backend/alembic/
+
+# Python bytecode
+__pycache__/
+*.pyc
+
+# Alembic versions and scripts
+/backend/alembic/versions/
+/backend/alembic/script.py.mako
+/backend/alembic/env.py
+/backend/alembic/README
