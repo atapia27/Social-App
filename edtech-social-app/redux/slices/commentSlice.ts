@@ -1,6 +1,6 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AppThunk } from '../store';
-import { CommentSchema } from '../../models/schemas';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { AppThunk } from "../store";
+import { CommentSchema } from "../../models/schemas";
 
 interface CommentState {
   comments: CommentSchema[];
@@ -15,7 +15,7 @@ const initialState: CommentState = {
 };
 
 const commentSlice = createSlice({
-  name: 'comments',
+  name: "comments",
   initialState,
   reducers: {
     fetchCommentsStart(state) {
@@ -45,29 +45,33 @@ export const {
 
 export default commentSlice.reducer;
 
-export const fetchComments = (video_id: string): AppThunk => async (dispatch) => {
-  dispatch(fetchCommentsStart());
-  try {
-    const response = await fetch(`/api/videos/comments?video_id=${video_id}`);
-    const data: CommentSchema[] = await response.json();
-    dispatch(fetchCommentsSuccess(data));
-  } catch (err: any) {
-    dispatch(fetchCommentsFailure(err.toString()));
-  }
-};
+export const fetchComments =
+  (video_id: string): AppThunk =>
+  async (dispatch) => {
+    dispatch(fetchCommentsStart());
+    try {
+      const response = await fetch(`/api/videos/comments?video_id=${video_id}`);
+      const data: CommentSchema[] = await response.json();
+      dispatch(fetchCommentsSuccess(data));
+    } catch (err: any) {
+      dispatch(fetchCommentsFailure(err.toString()));
+    }
+  };
 
-export const createComment = (comment: CommentSchema): AppThunk => async (dispatch) => {
-  try {
-    const response = await fetch('/api/videos/comments', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(comment),
-    });
-    const newComment: CommentSchema = await response.json();
-    dispatch(addComment(newComment));
-  } catch (err: any) {
-    console.error(err);
-  }
-};
+export const createComment =
+  (comment: CommentSchema): AppThunk =>
+  async (dispatch) => {
+    try {
+      const response = await fetch("/api/videos/comments", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(comment),
+      });
+      const newComment: CommentSchema = await response.json();
+      dispatch(addComment(newComment));
+    } catch (err: any) {
+      console.error(err);
+    }
+  };
