@@ -2,7 +2,7 @@ import { FC } from "react";
 import Link from "next/link";
 import { FiHome, FiUsers, FiBell, FiMessageCircle, FiSettings } from "react-icons/fi";
 import { useDispatch, useSelector } from 'react-redux';
-import { logout, selectAuthToken, selectAuthUsername, selectAuthIcon } from '../redux/slices/authSlice';
+import { logoutUser, selectAuthToken, selectAuthUsername, selectAuthIcon } from '../redux/slices/authSlice';
 import { AppDispatch } from '../redux/store';
 
 const Navbar: FC = () => {
@@ -12,10 +12,7 @@ const Navbar: FC = () => {
   const icon = useSelector(selectAuthIcon);
 
   const handleLogout = () => {
-    dispatch(logout());
-    localStorage.removeItem('token');
-    localStorage.removeItem('username');
-    localStorage.removeItem('icon');
+    dispatch(logoutUser());
   };
 
   return (
@@ -40,7 +37,7 @@ const Navbar: FC = () => {
       <div className="flex items-center space-x-4 text-sm">
         {token ? (
           <>
-            <img src={`/Icons/${icon}.png`} alt="Profile" className="w-8 h-8 rounded-full" />
+            <img src={icon ? `/Icons/${icon}.png` : '/defaultIcon.png'} alt="Profile" className="w-8 h-8 rounded-full" />
             <span>{username}</span>
             <FiSettings className="w-6 h-6" />
             <button onClick={handleLogout} className="text-sm text-white">Logout</button>

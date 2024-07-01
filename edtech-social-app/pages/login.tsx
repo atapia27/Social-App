@@ -1,42 +1,23 @@
+// edtech-social-app\pages\login.tsx
+
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useRouter } from 'next/router';
+import { loginUser } from '../redux/slices/authSlice';
+import { AppDispatch } from '../redux/store';
 
 const Login = () => {
   const [email, setEmail] = useState('');
-  const [username, setUsername] = useState('');
-  const [icon, setIcon] = useState('');
+  const dispatch = useDispatch<AppDispatch>();
+  const router = useRouter();
 
-  const icons = [
-    { name: "Bear", image: "/Icons/Bear.png" },
-    { name: "Cat", image: "/Icons/Cat.png" },
-    { name: "Cheeta", image: "/Icons/Cheeta.png" },
-    { name: "Cow", image: "/Icons/Cow.png" },
-    { name: "Crocodile", image: "/Icons/Crocodile.png" },
-    { name: "Dog", image: "/Icons/Dog.png" },
-    { name: "Hamster", image: "/Icons/Hamster.png" },
-    { name: "Jaguar", image: "/Icons/Jaguar.png" },
-    { name: "Penguin", image: "/Icons/Penguin.png" },
-    { name: "Sloth", image: "/Icons/Sloth.png" },
-    { name: "Turtle", image: "/Icons/Turtle.png" },
-    { name: "Walrus", image: "/Icons/Walrus.png" }, 
-  ];
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const response = await fetch('http://localhost:8000/users/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, username, icon }),
+    dispatch(loginUser(email)).then(() => {
+      router.push('/'); // Redirect to home or another page upon successful login
+    }).catch((error) => {
+      console.error('Login failed', error);
     });
-
-    if (response.ok) {
-      console.log('User created successfully!');
-      const data = await response.json();
-      console.log(data); // You can redirect or do other actions based on the created user
-    } else {
-      console.error('Failed to create user');
-    }
   };
 
   return (
@@ -52,25 +33,6 @@ const Login = () => {
             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             required
           />
-        </div>
-        <div>
-          <label htmlFor="username" className="block text-sm font-medium text-gray-700">Username:</label>
-          <input
-            type="text"
-            id="username"
-            value={username}
-            onChange={e => setUsername(e.target.value)}
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            required
-          />
-        </div>
-        <div className="flex gap-2 flex-wrap">
-          {icons.map((iconOption) => (
-            <div key={iconOption.name} className={`icon-option p-2 border-2 ${icon === iconOption.name ? 'border-blue-500' : 'border-gray-200'} rounded-lg cursor-pointer hover:border-gray-400 transform transition duration-200`} onClick={() => setIcon(iconOption.name)}>
-              <img src={iconOption.image} alt={iconOption.name} className="h-12 w-12" />
-              <span className="text-xs text-center">{iconOption.name}</span>
-            </div>
-          ))}
         </div>
         <button
           type="submit"

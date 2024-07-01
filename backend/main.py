@@ -7,8 +7,6 @@ from database import SessionLocal
 
 from jose import JWTError, jwt
 from datetime import datetime, timedelta
-from backend import crud, schemas
-from database import SessionLocal
 
 SECRET_KEY = "your-secret-key"
 ALGORITHM = "HS256"
@@ -26,7 +24,7 @@ def get_db():
 
 # CORS middleware to allow requests from your Next.js frontend
 origins = [
-    "http://localhost:3000",  
+    "http://localhost:3000",
 ]
 
 app.add_middleware(
@@ -89,3 +87,18 @@ async def get_user(user_id: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="User not found")
     return db_user
 
+@app.get("/users/by-email/{email}")
+async def get_user_by_email(email: str, db: Session = Depends(get_db)):
+    db_user = crud.get_user_by_email(db, email=email)
+    if db_user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_access_token(
+        data={"sub": db_user.email}, expires_delta=access_token_expires
+    )
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+        "username": db_user.username,
+        "icon": db_user.icon
+    }
