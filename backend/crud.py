@@ -1,10 +1,9 @@
 # backend\crud.py
 from sqlalchemy.orm import Session
-
 from . import models, schemas
 
 def create_user(db: Session, user: schemas.User):
-    db_user = models.User(email=user.email, username=user.username, icon=user.icon)
+    db_user = models.User(email=user.email, username=user.username, icon=user.icon, token=None)  # Initialize token as None
     db.add(db_user)
     db.commit()
     db.refresh(db_user)

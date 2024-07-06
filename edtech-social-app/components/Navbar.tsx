@@ -16,15 +16,19 @@ import {
   selectAuthIcon,
 } from "../redux/slices/authSlice";
 import { AppDispatch } from "../redux/store";
+import { useRouter } from "next/router"; // New import
 
 const Navbar: FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const token = useSelector(selectAuthToken);
   const username = useSelector(selectAuthUsername);
   const icon = useSelector(selectAuthIcon);
+  const router = useRouter(); // New addition
 
   const handleLogout = () => {
-    dispatch(logoutUser());
+    dispatch(logoutUser()).then(() => {
+      router.push('/login'); // Redirect to login page after logout
+    });
   };
 
   return (
@@ -50,7 +54,7 @@ const Navbar: FC = () => {
         {token ? (
           <>
             <img
-              src={icon ? `/icons/${icon}.png` : "/defaultIcon.png"}
+              src={icon ? `/Icons/${icon}.png` : "/defaultIcon.png"}
               alt="Profile"
               className="w-8 h-8 rounded-full"
             />

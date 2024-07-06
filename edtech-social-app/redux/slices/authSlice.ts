@@ -108,7 +108,7 @@ export const loginUser = (email: string): AppThunk => async (dispatch) => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ email }),
+      body: JSON.stringify({ email }),  // Ensure the email is sent as a JSON object
     });
 
     if (response.ok) {
@@ -128,6 +128,8 @@ export const loginUser = (email: string): AppThunk => async (dispatch) => {
   }
 };
 
+
+/*Updated the logoutUser function to include the token in the request header and call the /logout endpoint. It also dispatches the logout action to reset the authentication state. */
 export const logoutUser = (): AppThunk => async (dispatch) => {
   const token = localStorage.getItem('token');
   if (token) {
@@ -136,6 +138,7 @@ export const logoutUser = (): AppThunk => async (dispatch) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`  // Include the token in the request header
         },
         body: JSON.stringify({ token }),
       });
@@ -145,3 +148,4 @@ export const logoutUser = (): AppThunk => async (dispatch) => {
     }
   }
 };
+

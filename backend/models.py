@@ -1,8 +1,7 @@
 # backend\models.py
-from sqlalchemy import Integer, Column, ForeignKey, String
+from sqlalchemy import Integer, Column, ForeignKey, String  # Ensure this import is present
 from sqlalchemy.orm import relationship
 from database import Base
-
 
 class User(Base):
     __tablename__ = 'User'
@@ -10,6 +9,7 @@ class User(Base):
     email = Column(String, unique=True)
     username = Column(String, unique=True)
     icon = Column(String)
+    token = Column(String, nullable=True)  # Add this line to include the token attribute
 
 class Video(Base):
     __tablename__ = "Video"  # Capital 'V' to match the actual table name

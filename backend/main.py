@@ -1,9 +1,10 @@
 # backend\main.py
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer  # New import
-from fastapi import Depends, Request, FastAPI, HTTPException, Security, status  # Ensure this import is present 
+from fastapi import Depends, Request, FastAPI, HTTPException, Security, status  # Ensure this import is present
 from sqlalchemy.orm import Session
 from backend import crud, schemas
+from backend.schemas import LoginRequest  # Ensure this import is present
 from database import SessionLocal
 from datetime import datetime, timedelta # Ensure this import is present
 from jose import JWTError, jwt  # Ensure this import is present
@@ -61,9 +62,9 @@ async def verify_token(request: Request, token: str = Depends(oauth2_scheme)):
 def create_access_token(data: dict, expires_delta: timedelta = None):
     to_encode = data.copy()
     if expires_delta:
-        expire = datetime.now(datetime.UTC) + expires_delta
+        expire = datetime.utcnow() + expires_delta
     else:
-        expire = datetime.now(datetime.UTC) + timedelta(minutes=300)  # Set expiry to 5 hours
+        expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
@@ -89,45 +90,43 @@ async def get_current_user(token: str = Security(oauth2_scheme)):
 ##################################### TOKENS #####################################
 ##################################################################################
 
+""" Updated the /token endpoint to ensure the token is valid by checking if the token stored in the database matches the provided token. """
 ############### GET TOKEN ################
 @app.get("/token")
-async def read_token(token: str, db: Session = Depends(get_db)):
+async def read_token(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         email: str = payload.get("sub")
         if email is None:
             raise HTTPException(status_code=401, detail="Invalid token")
         db_user = crud.get_user_by_email(db, email=email)
-        if db_user is None:
+        if db_user is None or db_user.token != token:  # Ensure the token is valid
             raise HTTPException(status_code=404, detail="User not found")
         return db_user
     except JWTError:
         raise HTTPException(status_code=401, detail="Invalid token")
 
 #################################################################################
-##################################### USERS #####################################
+##################################### AUTH #####################################
 #################################################################################
 
-"""
-Modified the login_user endpoint to check if a user is already logged in by 
-verifying if a token exists for the user. Also added a logout_user endpoint to 
-handle user logout and invalidate the token.
-"""
+""" Modified the login_user endpoint to check if a user is already logged in by verifying if a token exists for the user. """
 ############### LOGIN USER ################
 @app.post("/login")
-async def login_user(email: str, db: Session = Depends(get_db)):
-    db_user = crud.get_user_by_email(db, email=email)
+async def login_user(request: LoginRequest, db: Session = Depends(get_db)):
+    db_user = crud.get_user_by_email(db, email=request.email)
     if not db_user:
         raise HTTPException(status_code=404, detail="User not found")
     
     # Check if user is already logged in by verifying if they have a valid token
-    try:
-        payload = jwt.decode(db_user.token, SECRET_KEY, algorithms=[ALGORITHM])
-        if payload:
-            raise HTTPException(status_code=400, detail="User already logged in")
-    except JWTError:
-        # If token is invalid or expired, allow login process to continue
-        pass
+    if db_user.token:  # Only attempt to decode if the token is not None
+        try:
+            payload = jwt.decode(db_user.token, SECRET_KEY, algorithms=[ALGORITHM])
+            if payload:
+                raise HTTPException(status_code=400, detail="User already logged in")
+        except JWTError:
+            # If token is invalid or expired, allow login process to continue
+            pass
 
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(data={"sub": db_user.email}, expires_delta=access_token_expires)
@@ -142,17 +141,28 @@ async def login_user(email: str, db: Session = Depends(get_db)):
         "icon": db_user.icon
     }
 
-############### LOGOUT USER ??????????????? ################
-@app.post("/users/logout")
-async def logout_user(email: str, db: Session = Depends(get_db)):
-    db_user = crud.get_user_by_email(db, email=email)
-    if not db_user:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+""" Added a /logout endpoint to invalidate the user's token by setting it to None in the database."""
+############### LOGOUT USER ################
+@app.post("/logout")
+async def logout_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        email: str = payload.get("sub")
+        db_user = crud.get_user_by_email(db, email=email)
+        if db_user:
+            db_user.token = None  # Invalidate the token
+            db.commit()
+        return {"message": "Successfully logged out"}
+    except JWTError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid token",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
 
-    db_user.token = None
-    db.commit()
-
-    return {"detail": "Successfully logged out"}
+#################################################################################
+##################################### USERS #####################################
+#################################################################################
 
 ############### CREATE USER ################
 @app.post("/users/")

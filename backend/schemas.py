@@ -20,3 +20,7 @@ class Comment(BaseModel):
 # New addition
 class TokenData(BaseModel):
     email: str
+
+# New addition
+class LoginRequest(BaseModel):
+    email: str
