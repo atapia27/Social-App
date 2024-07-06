@@ -1,3 +1,4 @@
+// edtech-social-app\redux\slices\commentSlice.ts
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk } from "../store";
 import { CommentSchema } from "../../models/schemas";

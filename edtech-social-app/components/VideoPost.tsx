@@ -1,3 +1,4 @@
+//edtech-social-app\components\VideoPost.tsx
 import React, { useState } from "react";
 import { FiThumbsUp, FiMessageSquare, FiShare } from "react-icons/fi";
 import CommentForm from "./CommentForm";
