@@ -50,7 +50,7 @@ const Navbar: FC = () => {
         {token ? (
           <>
             <img
-              src={icon ? `/Icons/${icon}.png` : "/defaultIcon.png"}
+              src={icon ? `/icons/${icon}.png` : "/defaultIcon.png"}
               alt="Profile"
               className="w-8 h-8 rounded-full"
             />

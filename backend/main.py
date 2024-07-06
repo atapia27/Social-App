@@ -1,7 +1,7 @@
 # backend\main.py
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer  # New import
-from fastapi import Depends, Request, FastAPI, HTTPException, Security # New import
+from fastapi import Depends, Request, FastAPI, HTTPException, Security, status  # Ensure this import is present 
 from sqlalchemy.orm import Session
 from backend import crud, schemas
 from database import SessionLocal
@@ -108,7 +108,53 @@ async def read_token(token: str, db: Session = Depends(get_db)):
 ##################################### USERS #####################################
 #################################################################################
 
-############### POST USER ################
+"""
+Modified the login_user endpoint to check if a user is already logged in by 
+verifying if a token exists for the user. Also added a logout_user endpoint to 
+handle user logout and invalidate the token.
+"""
+############### LOGIN USER ################
+@app.post("/login")
+async def login_user(email: str, db: Session = Depends(get_db)):
+    db_user = crud.get_user_by_email(db, email=email)
+    if not db_user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Check if user is already logged in by verifying if they have a valid token
+    try:
+        payload = jwt.decode(db_user.token, SECRET_KEY, algorithms=[ALGORITHM])
+        if payload:
+            raise HTTPException(status_code=400, detail="User already logged in")
+    except JWTError:
+        # If token is invalid or expired, allow login process to continue
+        pass
+
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_access_token(data={"sub": db_user.email}, expires_delta=access_token_expires)
+    
+    db_user.token = access_token  # Save the new token
+    db.commit()
+
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+        "username": db_user.username,
+        "icon": db_user.icon
+    }
+
+############### LOGOUT USER ??????????????? ################
+@app.post("/users/logout")
+async def logout_user(email: str, db: Session = Depends(get_db)):
+    db_user = crud.get_user_by_email(db, email=email)
+    if not db_user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+
+    db_user.token = None
+    db.commit()
+
+    return {"detail": "Successfully logged out"}
+
+############### CREATE USER ################
 @app.post("/users/")
 async def create_user(user: schemas.User, db: Session = Depends(get_db)):
     db_user = crud.get_user_by_email(db, email=user.email)
@@ -126,7 +172,7 @@ async def create_user(user: schemas.User, db: Session = Depends(get_db)):
         "icon": new_user.icon
     }
 
-############### GET USERS ################
+############### GET USER ################
 @app.get("/users/{user_id}")
 async def get_user(user_id: str, db: Session = Depends(get_db)):
     db_user = crud.get_user(db, user_id=user_id)
@@ -134,7 +180,7 @@ async def get_user(user_id: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="User not found")
     return db_user
 
-############### GET USERS BY EMAIL ################
+############### GET USER BY EMAIL ################
 @app.get("/users/by-email/{email}")
 async def get_user_by_email(email: str, db: Session = Depends(get_db)):
     db_user = crud.get_user_by_email(db, email=email)
