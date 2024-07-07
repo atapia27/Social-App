@@ -1,16 +1,20 @@
 // edtech-social-app\pages\register.tsx
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { useRouter } from "next/router";
-import { registerUser } from "../redux/slices/authSlice";
-import { AppDispatch } from "../redux/store";
+
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
+import { registerUser, selectAuthToken, selectAuthError, selectAuthLoading } from '../redux/slices/authSlice';
+import { AppDispatch, RootState } from '../redux/store';
 
 const Register = () => {
-  const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
-  const [icon, setIcon] = useState("");
+  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
+  const [icon, setIcon] = useState('');
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
+  const authLoading = useSelector(selectAuthLoading);
+  const authError = useSelector(selectAuthError);
+  const authToken = useSelector(selectAuthToken);
 
   const icons = [
     { name: "Bear", image: "/Icons/Bear.png" },
@@ -24,69 +28,49 @@ const Register = () => {
     { name: "Penguin", image: "/Icons/Penguin.png" },
     { name: "Sloth", image: "/Icons/Sloth.png" },
     { name: "Turtle", image: "/Icons/Turtle.png" },
-    { name: "Walrus", image: "/Icons/Walrus.png" },
+    { name: "Walrus", image: "/Icons/Walrus.png" }, 
   ];
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(registerUser(email, username, icon))
-      .then(() => {
-        router.push("/"); // Redirect to home or another page upon successful registration
-      })
-      .catch((error) => {
-        console.error("Registration failed", error);
-      });
+    await dispatch(registerUser(email, username, icon));
   };
+
+  useEffect(() => {
+    if (!authLoading && authToken) {
+      router.push('/'); // Redirect to home page upon successful registration and login
+    }
+  }, [authLoading, authToken, router]);
 
   return (
     <div className="flex flex-col items-center justify-center p-4">
       <form onSubmit={handleSubmit} className="w-full max-w-lg space-y-4">
         <div>
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Email:
-          </label>
+          <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email:</label>
           <input
             type="email"
             id="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={e => setEmail(e.target.value)}
             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             required
           />
         </div>
         <div>
-          <label
-            htmlFor="username"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Username:
-          </label>
+          <label htmlFor="username" className="block text-sm font-medium text-gray-700">Username:</label>
           <input
             type="text"
             id="username"
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={e => setUsername(e.target.value)}
             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             required
           />
         </div>
         <div className="flex gap-2 flex-wrap">
           {icons.map((iconOption) => (
-            <div
-              key={iconOption.name}
-              className={`icon-option p-2 border-2 ${
-                icon === iconOption.name ? "border-blue-500" : "border-gray-200"
-              } rounded-lg cursor-pointer hover:border-gray-400 transform transition duration-200`}
-              onClick={() => setIcon(iconOption.name)}
-            >
-              <img
-                src={iconOption.image}
-                alt={iconOption.name}
-                className="h-12 w-12"
-              />
+            <div key={iconOption.name} className={`p-2 border-2 ${icon === iconOption.name ? 'border-blue-500' : 'border-gray-200'} rounded-lg cursor-pointer hover:border-gray-400 transform transition duration-200`} onClick={() => setIcon(iconOption.name)}>
+              <img src={iconOption.image} alt={iconOption.name} className="h-12 w-12" />
               <span className="text-xs text-center">{iconOption.name}</span>
             </div>
           ))}

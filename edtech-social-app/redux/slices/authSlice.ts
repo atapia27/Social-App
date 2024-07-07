@@ -108,7 +108,7 @@ export const registerUser =
   async (dispatch) => {
     dispatch(authStart());
     try {
-      const response = await fetch("http://localhost:8000/auth/users/", {
+      const response = await fetch("http://localhost:8000/users/users/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
