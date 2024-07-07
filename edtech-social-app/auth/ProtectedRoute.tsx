@@ -1,5 +1,5 @@
 // edtech-social-app\auth\ProtectedRoute.tsx
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import { selectAuthToken, checkAuthToken } from '../redux/slices/authSlice';
@@ -13,21 +13,23 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const dispatch = useDispatch<AppDispatch>();
   const token = useSelector(selectAuthToken);
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     if (!token) {
       dispatch(checkAuthToken());
     }
   }, [dispatch, token]);
 
   useEffect(() => {
-    if (!token) {
+    if (mounted && !token) {
       router.push('/register');
     }
-  }, [token, router]);
+  }, [mounted, token, router]);
 
-  if (!token) {
-    return null;  // Or a loading spinner, etc.
+  if (!mounted || !token) {
+    return null; // or a loading spinner, etc.
   }
 
   return <>{children}</>;

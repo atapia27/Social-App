@@ -1,35 +1,28 @@
 //edtech-social-app\components\Navbar.tsx
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import Link from "next/link";
-import {
-  FiHome,
-  FiUsers,
-  FiBell,
-  FiMessageCircle,
-  FiSettings,
-} from "react-icons/fi";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  logoutUser,
-  selectAuthToken,
-  selectAuthUsername,
-  selectAuthIcon,
-} from "../redux/slices/authSlice";
-import { AppDispatch } from "../redux/store";
-import { useRouter } from "next/router"; // New import
+import { FiHome, FiUsers, FiBell, FiMessageCircle, FiSettings } from "react-icons/fi";
+import { useDispatch, useSelector } from 'react-redux';
+import { logoutUser, selectAuthToken, selectAuthUsername, selectAuthIcon } from '../redux/slices/authSlice';
+import { AppDispatch } from '../redux/store';
 
 const Navbar: FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const token = useSelector(selectAuthToken);
   const username = useSelector(selectAuthUsername);
   const icon = useSelector(selectAuthIcon);
-  const router = useRouter(); // New addition
+
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleLogout = () => {
-    dispatch(logoutUser()).then(() => {
-      router.push('/login'); // Redirect to login page after logout
-    });
+    dispatch(logoutUser());
   };
+
+  if (!mounted) return null;
 
   return (
     <nav className="bg-[#FD9B63] text-white p-4 flex justify-between items-center h-14 sticky top-0 z-50 align-middle">
@@ -53,25 +46,15 @@ const Navbar: FC = () => {
       <div className="flex items-center space-x-4 text-sm">
         {token ? (
           <>
-            <img
-              src={icon ? `/Icons/${icon}.png` : "/defaultIcon.png"}
-              alt="Profile"
-              className="w-8 h-8 rounded-full"
-            />
+            <img src={icon ? `/icons/${icon}.png` : '/defaultIcon.png'} alt="Profile" className="w-8 h-8 rounded-full" />
             <span>{username}</span>
             <FiSettings className="w-6 h-6" />
-            <button onClick={handleLogout} className="text-sm text-white">
-              Logout
-            </button>
+            <button onClick={handleLogout} className="text-sm text-white">Logout</button>
           </>
         ) : (
           <>
-            <Link href="/login" className="text-sm text-white">
-              Login
-            </Link>
-            <Link href="/register" className="text-sm text-white">
-              Register
-            </Link>
+            <Link href="/login" className="text-sm text-white">Login</Link>
+            <Link href="/register" className="text-sm text-white">Register</Link>
           </>
         )}
       </div>

@@ -1,4 +1,4 @@
-// pages/index.tsx
+// edtech-social-app\pages\index.tsx
 
 import type { NextPage } from "next";
 import VideoFeed from "../components/VideoFeed";

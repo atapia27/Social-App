@@ -1,4 +1,4 @@
-// pages/_app.tsx
+// edtech-social-app\pages\_app.tsx
 import { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
 import { Provider } from 'react-redux';
