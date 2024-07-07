@@ -108,7 +108,7 @@ export const registerUser =
   async (dispatch) => {
     dispatch(authStart());
     try {
-      const response = await fetch("http://localhost:8000/users/", {
+      const response = await fetch("http://localhost:8000/auth/users/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -139,12 +139,12 @@ export const loginUser =
   async (dispatch) => {
     dispatch(authStart());
     try {
-      const response = await fetch(`http://localhost:8000/login`, {
+      const response = await fetch("http://localhost:8000/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email }), // Ensure the email is sent as a JSON object
+        body: JSON.stringify({ email }),
       });
 
       if (response.ok) {
@@ -172,20 +172,20 @@ export const loginUser =
 
 /*Updated the logoutUser function to include the token in the request header and call the /logout endpoint. It also dispatches the logout action to reset the authentication state. */
 export const logoutUser = (): AppThunk => async (dispatch) => {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem('token');
   if (token) {
     try {
-      await fetch("http://localhost:8000/logout", {
-        method: "POST",
+      await fetch('http://localhost:8000/auth/logout', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // Include the token in the request header
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`  // Include the token in the request header
         },
         body: JSON.stringify({ token }),
       });
       dispatch(logout());
     } catch (err: any) {
-      console.error("Logout failed", err);
+      console.error('Logout failed', err);
     }
   }
 };
