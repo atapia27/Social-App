@@ -1,3 +1,4 @@
+// edtech-social-app\redux\slices\authSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppThunk, RootState } from '../store';
 
@@ -76,76 +77,115 @@ export const selectAuthIcon = (state: RootState) => state.auth.icon;
 export const selectAuthLoading = (state: RootState) => state.auth.loading;
 export const selectAuthError = (state: RootState) => state.auth.error;
 
-// Thunks for handling async logic (e.g., login, register, logout)
-export const registerUser = (email: string, username: string, icon: string): AppThunk => async (dispatch) => {
-  dispatch(authStart());
-  try {
-    const response = await fetch('http://localhost:8000/users/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, username, icon }),
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      dispatch(authSuccess({ token: data.access_token, username: data.username, icon: data.icon }));
-    } else {
-      const errorData = await response.json();
-      dispatch(authFailure(errorData.detail || 'Registration failed'));
-    }
-  } catch (err: any) {
-    dispatch(authFailure(err.toString()));
-  }
-};
-
-export const loginUser = (email: string): AppThunk => async (dispatch) => {
-  dispatch(authStart());
-  try {
-    const response = await fetch(`http://localhost:8000/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email }),  // Ensure the email is sent as a JSON object
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      dispatch(authSuccess({ token: data.access_token, username: data.username, icon: data.icon }));
-    } else {
-      const errorData = await response.json();
-      if (errorData.detail === "User already logged in") {
-        // Handle the case where another user is already logged in
-        dispatch(authFailure("User already logged in"));
-      } else {
-        dispatch(authFailure(errorData.detail || 'Login failed'));
-      }
-    }
-  } catch (err: any) {
-    dispatch(authFailure(err.toString()));
-  }
-};
-
-
-/*Updated the logoutUser function to include the token in the request header and call the /logout endpoint. It also dispatches the logout action to reset the authentication state. */
-export const logoutUser = (): AppThunk => async (dispatch) => {
+export const checkAuthToken = (): AppThunk => async (dispatch) => {
   const token = localStorage.getItem('token');
   if (token) {
     try {
-      await fetch('http://localhost:8000/logout', {
-        method: 'POST',
+      const response = await fetch('http://localhost:8000/token', {
+        method: 'GET',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`  // Include the token in the request header
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        dispatch(authSuccess({ token, username: data.username, icon: data.icon }));
+      } else {
+        dispatch(logout());
+      }
+    } catch (error) {
+      dispatch(logout());
+    }
+  } else {
+    dispatch(logout());
+  }
+};
+
+// Thunks for handling async logic (e.g., login, register, logout)
+export const registerUser =
+  (email: string, username: string, icon: string): AppThunk =>
+  async (dispatch) => {
+    dispatch(authStart());
+    try {
+      const response = await fetch("http://localhost:8000/users/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, username, icon }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        dispatch(
+          authSuccess({
+            token: data.access_token,
+            username: data.username,
+            icon: data.icon,
+          })
+        );
+      } else {
+        const errorData = await response.json();
+        dispatch(authFailure(errorData.detail || "Registration failed"));
+      }
+    } catch (err: any) {
+      dispatch(authFailure(err.toString()));
+    }
+  };
+
+export const loginUser =
+  (email: string): AppThunk =>
+  async (dispatch) => {
+    dispatch(authStart());
+    try {
+      const response = await fetch(`http://localhost:8000/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }), // Ensure the email is sent as a JSON object
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        dispatch(
+          authSuccess({
+            token: data.access_token,
+            username: data.username,
+            icon: data.icon,
+          })
+        );
+      } else {
+        const errorData = await response.json();
+        if (errorData.detail === "User already logged in") {
+          // Handle the case where another user is already logged in
+          dispatch(authFailure("User already logged in"));
+        } else {
+          dispatch(authFailure(errorData.detail || "Login failed"));
+        }
+      }
+    } catch (err: any) {
+      dispatch(authFailure(err.toString()));
+    }
+  };
+
+/*Updated the logoutUser function to include the token in the request header and call the /logout endpoint. It also dispatches the logout action to reset the authentication state. */
+export const logoutUser = (): AppThunk => async (dispatch) => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    try {
+      await fetch("http://localhost:8000/logout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Include the token in the request header
         },
         body: JSON.stringify({ token }),
       });
       dispatch(logout());
     } catch (err: any) {
-      console.error('Logout failed', err);
+      console.error("Logout failed", err);
     }
   }
 };
-

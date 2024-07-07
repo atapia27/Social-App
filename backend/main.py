@@ -90,7 +90,7 @@ async def get_current_user(token: str = Security(oauth2_scheme)):
 ##################################### TOKENS #####################################
 ##################################################################################
 
-""" Updated the /token endpoint to ensure the token is valid by checking if the token stored in the database matches the provided token. """
+""" Updated the /token endpoint to verify if a user is logged in and return the appropriate response. """
 ############### GET TOKEN ################
 @app.get("/token")
 async def read_token(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
@@ -102,7 +102,7 @@ async def read_token(token: str = Depends(oauth2_scheme), db: Session = Depends(
         db_user = crud.get_user_by_email(db, email=email)
         if db_user is None or db_user.token != token:  # Ensure the token is valid
             raise HTTPException(status_code=404, detail="User not found")
-        return db_user
+        return {"email": db_user.email, "username": db_user.username, "icon": db_user.icon}
     except JWTError:
         raise HTTPException(status_code=401, detail="Invalid token")
 
