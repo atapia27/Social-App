@@ -36,7 +36,7 @@ const Navbar: FC = () => {
   if (!mounted) return null;
 
   return (
-    <nav className="bg-[#FD9B63] text-white p-4 flex justify-between items-center h-14 sticky top-0 z-50 align-middle">
+    <nav className="sticky top-0 z-50 flex h-14 items-center justify-between bg-[#FD9B63] p-4 align-middle text-white">
       <div className="">
         <img src="/FULL_LOGO_COLOR.png" alt="Logo" className="h-8" />
       </div>
@@ -60,10 +60,10 @@ const Navbar: FC = () => {
             <img
               src={icon ? `/icons/${icon}.png` : "/defaultIcon.png"}
               alt="Profile"
-              className="w-8 h-8 rounded-full"
+              className="h-8 w-8 rounded-full"
             />
             <span>{username}</span>
-            <FiSettings className="w-6 h-6" />
+            <FiSettings className="h-6 w-6" />
             <button onClick={handleLogout} className="text-sm text-white">
               Logout
             </button>

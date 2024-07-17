@@ -22,13 +22,13 @@ const CreateVideoForm: React.FC<CreateVideoFormProps> = ({ onCreate }) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="mx-auto w-[55%] mb-8 bg-white rounded-lg shadow-md px-6 py-4 pt-6"
+      className="mx-auto mb-8 w-[55%] rounded-lg bg-white px-6 py-4 pt-6 shadow-md"
     >
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+      <div className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
         <div>
           <label
             htmlFor="title"
-            className="block text-sm font-medium text-gray-700 mb-1"
+            className="mb-1 block text-sm font-medium text-gray-700"
           >
             Title
           </label>
@@ -38,14 +38,14 @@ const CreateVideoForm: React.FC<CreateVideoFormProps> = ({ onCreate }) => {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Enter video title"
-            className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+            className="w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500"
             required
           />
         </div>
         <div>
           <label
             htmlFor="videoUrl"
-            className="block text-sm font-medium text-gray-700 mb-1"
+            className="mb-1 block text-sm font-medium text-gray-700"
           >
             Video URL
           </label>
@@ -55,7 +55,7 @@ const CreateVideoForm: React.FC<CreateVideoFormProps> = ({ onCreate }) => {
             value={videoUrl}
             onChange={(e) => setVideoUrl(e.target.value)}
             placeholder="Enter video URL"
-            className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+            className="w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500"
             required
           />
         </div>
@@ -63,7 +63,7 @@ const CreateVideoForm: React.FC<CreateVideoFormProps> = ({ onCreate }) => {
       <div className="mb-4">
         <label
           htmlFor="description"
-          className="block text-sm font-medium text-gray-700 mb-1"
+          className="mb-1 block text-sm font-medium text-gray-700"
         >
           Description
         </label>
@@ -72,14 +72,14 @@ const CreateVideoForm: React.FC<CreateVideoFormProps> = ({ onCreate }) => {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           placeholder="Enter video description"
-          className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 resize-none"
+          className="w-full resize-none rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500"
           required
         />
       </div>
-      <div className="flex justify-center border-t border-gray-200 mt-2 pt-2 items-center text-sm">
+      <div className="mt-2 flex items-center justify-center border-t border-gray-200 pt-2 text-sm">
         <button
           type="submit"
-          className=" w-1/5 flex items-center justify-center px-4 text-gray-500 rounded-md hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          className="flex w-1/5 items-center justify-center rounded-md px-4 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
         >
           <FiCornerDownRight className="mr-2" />
           Post

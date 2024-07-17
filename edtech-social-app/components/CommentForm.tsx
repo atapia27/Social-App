@@ -37,16 +37,16 @@ const CommentForm: React.FC<Props> = ({ videoId }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="mt-4 mx-4 flex items-center gap-2">
+    <form onSubmit={handleSubmit} className="mx-4 mt-4 flex items-center gap-2">
       <textarea
         value={content}
         onChange={(e) => setContent(e.target.value)}
         placeholder="Write a comment..."
-        className=" w-full p-2 border border-gray-300 rounded resize-none"
+        className="w-full resize-none rounded border border-gray-300 p-2"
       />
       <button
         type="submit"
-        className="h-16 w-[7.5%] flex items-center justify-center py-1 px-1 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        className="flex h-16 w-[7.5%] items-center justify-center rounded bg-blue-500 px-1 py-1 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
       >
         <FiSend />
       </button>
