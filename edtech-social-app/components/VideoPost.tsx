@@ -1,12 +1,12 @@
 //edtech-social-app\components\VideoPost.tsx
-import React, { useState } from "react";
-import { FiThumbsUp, FiMessageSquare, FiShare } from "react-icons/fi";
-import CommentForm from "./CommentForm";
+import React, { useState } from "react"
+import { FiThumbsUp, FiMessageSquare, FiShare } from "react-icons/fi"
+import CommentForm from "./CommentForm"
 
 interface VideoPostProps {
-  title: string;
-  description: string;
-  videoUrl: string;
+  title: string
+  description: string
+  videoUrl: string
 }
 
 const VideoPost: React.FC<VideoPostProps> = ({
@@ -14,11 +14,11 @@ const VideoPost: React.FC<VideoPostProps> = ({
   description,
   videoUrl,
 }) => {
-  const [showCommentForm, setShowCommentForm] = useState(false);
+  const [showCommentForm, setShowCommentForm] = useState(false)
 
   const toggleCommentForm = () => {
-    setShowCommentForm(!showCommentForm);
-  };
+    setShowCommentForm(!showCommentForm)
+  }
 
   return (
     <div className="mx-auto mb-8 w-[55%] rounded-lg bg-white shadow-md">
@@ -54,7 +54,7 @@ const VideoPost: React.FC<VideoPostProps> = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default VideoPost;
+export default VideoPost

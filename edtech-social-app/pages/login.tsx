@@ -1,26 +1,26 @@
 // edtech-social-app\pages\login.tsx
 
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { useRouter } from "next/router";
-import { loginUser } from "../redux/slices/authSlice";
-import { AppDispatch } from "../redux/store";
+import React, { useState } from "react"
+import { useDispatch } from "react-redux"
+import { useRouter } from "next/router"
+import { loginUser } from "../redux/slices/authSlice"
+import { AppDispatch } from "../redux/store"
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const dispatch = useDispatch<AppDispatch>();
-  const router = useRouter();
+  const [email, setEmail] = useState("")
+  const dispatch = useDispatch<AppDispatch>()
+  const router = useRouter()
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    e.preventDefault()
     dispatch(loginUser(email))
       .then(() => {
-        router.push("/"); // Redirect to home or another page upon successful login
+        router.push("/") // Redirect to home or another page upon successful login
       })
       .catch((error) => {
-        console.error("Login failed", error);
-      });
-  };
+        console.error("Login failed", error)
+      })
+  }
 
   return (
     <div className="flex flex-col items-center justify-center p-4">
@@ -49,7 +49,7 @@ const Login = () => {
         </button>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default Login;
+export default Login

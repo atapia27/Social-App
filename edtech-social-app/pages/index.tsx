@@ -1,7 +1,7 @@
 // edtech-social-app\pages\index.tsx
 
-import type { NextPage } from "next";
-import VideoFeed from "../components/VideoFeed";
+import type { NextPage } from "next"
+import VideoFeed from "../components/VideoFeed"
 
 const Home: NextPage = () => {
   return (
@@ -10,7 +10,7 @@ const Home: NextPage = () => {
         <VideoFeed />
       </main>
     </div>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home

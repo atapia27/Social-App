@@ -1,39 +1,39 @@
 //edtech-social-app\components\Navbar.tsx
-import { FC, useEffect, useState } from "react";
-import Link from "next/link";
+import { FC, useEffect, useState } from "react"
+import Link from "next/link"
 import {
   FiHome,
   FiUsers,
   FiBell,
   FiMessageCircle,
   FiSettings,
-} from "react-icons/fi";
-import { useDispatch, useSelector } from "react-redux";
+} from "react-icons/fi"
+import { useDispatch, useSelector } from "react-redux"
 import {
   logoutUser,
   selectAuthToken,
   selectAuthUsername,
   selectAuthIcon,
-} from "../redux/slices/authSlice";
-import { AppDispatch } from "../redux/store";
+} from "../redux/slices/authSlice"
+import { AppDispatch } from "../redux/store"
 
 const Navbar: FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
-  const token = useSelector(selectAuthToken);
-  const username = useSelector(selectAuthUsername);
-  const icon = useSelector(selectAuthIcon);
+  const dispatch = useDispatch<AppDispatch>()
+  const token = useSelector(selectAuthToken)
+  const username = useSelector(selectAuthUsername)
+  const icon = useSelector(selectAuthIcon)
 
-  const [mounted, setMounted] = useState(false);
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    setMounted(true);
-  }, []);
+    setMounted(true)
+  }, [])
 
   const handleLogout = () => {
-    dispatch(logoutUser());
-  };
+    dispatch(logoutUser())
+  }
 
-  if (!mounted) return null;
+  if (!mounted) return null
 
   return (
     <nav className="sticky top-0 z-50 flex h-14 items-center justify-between bg-[#FD9B63] p-4 align-middle text-white">
@@ -80,7 +80,7 @@ const Navbar: FC = () => {
         )}
       </div>
     </nav>
-  );
-};
+  )
+}
 
-export default Navbar;
+export default Navbar

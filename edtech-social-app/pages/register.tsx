@@ -1,25 +1,25 @@
 // edtech-social-app\pages\register.tsx
 
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useRouter } from "next/router";
+import React, { useState, useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { useRouter } from "next/router"
 import {
   registerUser,
   selectAuthToken,
   selectAuthError,
   selectAuthLoading,
-} from "../redux/slices/authSlice";
-import { AppDispatch, RootState } from "../redux/store";
+} from "../redux/slices/authSlice"
+import { AppDispatch, RootState } from "../redux/store"
 
 const Register = () => {
-  const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
-  const [icon, setIcon] = useState("");
-  const dispatch = useDispatch<AppDispatch>();
-  const router = useRouter();
-  const authLoading = useSelector(selectAuthLoading);
-  const authError = useSelector(selectAuthError);
-  const authToken = useSelector(selectAuthToken);
+  const [email, setEmail] = useState("")
+  const [username, setUsername] = useState("")
+  const [icon, setIcon] = useState("")
+  const dispatch = useDispatch<AppDispatch>()
+  const router = useRouter()
+  const authLoading = useSelector(selectAuthLoading)
+  const authError = useSelector(selectAuthError)
+  const authToken = useSelector(selectAuthToken)
 
   const icons = [
     { name: "Bear", image: "/Icons/Bear.png" },
@@ -34,18 +34,18 @@ const Register = () => {
     { name: "Sloth", image: "/Icons/Sloth.png" },
     { name: "Turtle", image: "/Icons/Turtle.png" },
     { name: "Walrus", image: "/Icons/Walrus.png" },
-  ];
+  ]
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    await dispatch(registerUser(email, username, icon));
-  };
+    e.preventDefault()
+    await dispatch(registerUser(email, username, icon))
+  }
 
   useEffect(() => {
     if (!authLoading && authToken) {
-      router.push("/"); // Redirect to home page upon successful registration and login
+      router.push("/") // Redirect to home page upon successful registration and login
     }
-  }, [authLoading, authToken, router]);
+  }, [authLoading, authToken, router])
 
   return (
     <div className="flex flex-col items-center justify-center p-4">
@@ -106,7 +106,7 @@ const Register = () => {
         </button>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default Register;
+export default Register

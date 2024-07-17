@@ -1,8 +1,8 @@
 // edtech-social-app\redux\store.ts
-import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
-import videoReducer from "./slices/videoSlice";
-import commentReducer from "./slices/commentSlice";
-import authReducer from "./slices/authSlice"; // Import the authReducer
+import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit"
+import videoReducer from "./slices/videoSlice"
+import commentReducer from "./slices/commentSlice"
+import authReducer from "./slices/authSlice" // Import the authReducer
 
 export const store = configureStore({
   reducer: {
@@ -10,14 +10,14 @@ export const store = configureStore({
     comments: commentReducer,
     auth: authReducer, // Add authReducer to the store
   },
-});
+})
 
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
+export type RootState = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch
 
 export type AppThunk<ReturnType = Promise<void>> = ThunkAction<
   ReturnType,
   RootState,
   unknown,
   Action<string>
->;
+>

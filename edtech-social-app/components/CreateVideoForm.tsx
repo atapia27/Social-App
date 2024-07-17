@@ -1,23 +1,23 @@
 //edtech-social-app\components\CreateVideoForm.tsx
-import React, { useState } from "react";
-import { FiCornerDownRight } from "react-icons/fi";
+import React, { useState } from "react"
+import { FiCornerDownRight } from "react-icons/fi"
 
 interface CreateVideoFormProps {
-  onCreate: (title: string, description: string, videoUrl: string) => void;
+  onCreate: (title: string, description: string, videoUrl: string) => void
 }
 
 const CreateVideoForm: React.FC<CreateVideoFormProps> = ({ onCreate }) => {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [videoUrl, setVideoUrl] = useState("");
+  const [title, setTitle] = useState("")
+  const [description, setDescription] = useState("")
+  const [videoUrl, setVideoUrl] = useState("")
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onCreate(title, description, videoUrl);
-    setTitle("");
-    setDescription("");
-    setVideoUrl("");
-  };
+    e.preventDefault()
+    onCreate(title, description, videoUrl)
+    setTitle("")
+    setDescription("")
+    setVideoUrl("")
+  }
 
   return (
     <form
@@ -86,7 +86,7 @@ const CreateVideoForm: React.FC<CreateVideoFormProps> = ({ onCreate }) => {
         </button>
       </div>
     </form>
-  );
-};
+  )
+}
 
-export default CreateVideoForm;
+export default CreateVideoForm

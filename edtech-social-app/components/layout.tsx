@@ -1,26 +1,26 @@
 //edtech-social-app\components\layout.tsx
-import { ReactNode, useEffect, useState } from "react";
-import Navbar from "./Navbar";
+import { ReactNode, useEffect, useState } from "react"
+import Navbar from "./Navbar"
 
 interface LayoutProps {
-  children: ReactNode;
+  children: ReactNode
 }
 
 const Layout = ({ children }: LayoutProps) => {
-  const [mounted, setMounted] = useState(false);
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    setMounted(true);
-  }, []);
+    setMounted(true)
+  }, [])
 
-  if (!mounted) return null; // or a loading spinner, etc.
+  if (!mounted) return null // or a loading spinner, etc.
 
   return (
     <div className="min-h-screen bg-gray-100">
       <Navbar />
       <main>{children}</main>
     </div>
-  );
-};
+  )
+}
 
-export default Layout;
+export default Layout
