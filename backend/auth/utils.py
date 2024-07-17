@@ -10,6 +10,7 @@ from dependencies import get_db
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
+
 def create_access_token(data: dict, expires_delta: timedelta = None):
     to_encode = data.copy()
     if expires_delta:
@@ -19,6 +20,7 @@ def create_access_token(data: dict, expires_delta: timedelta = None):
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
+
 
 async def verify_token(request: Request, token: str = Depends(oauth2_scheme)):
     credentials_exception = HTTPException(
@@ -35,6 +37,7 @@ async def verify_token(request: Request, token: str = Depends(oauth2_scheme)):
     except JWTError:
         raise credentials_exception
     request.state.user = token_data
+
 
 async def get_current_user(token: str = Security(oauth2_scheme)):
     credentials_exception = HTTPException(

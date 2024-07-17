@@ -1,15 +1,24 @@
 # backend\models.py
-from sqlalchemy import Integer, Column, ForeignKey, String  # Ensure this import is present
+from sqlalchemy import (
+    Integer,
+    Column,
+    ForeignKey,
+    String,
+)  # Ensure this import is present
 from sqlalchemy.orm import relationship
 from database import Base
 
+
 class User(Base):
-    __tablename__ = 'User'
+    __tablename__ = "User"
     id = Column(Integer, primary_key=True, autoincrement=True)
     email = Column(String, unique=True)
     username = Column(String, unique=True)
     icon = Column(String)
-    token = Column(String, nullable=True)  # Add this line to include the token attribute
+    token = Column(
+        String, nullable=True
+    )  # Add this line to include the token attribute
+
 
 class Video(Base):
     __tablename__ = "Video"  # Capital 'V' to match the actual table name
@@ -22,6 +31,7 @@ class Video(Base):
 
     comments = relationship("Comment", back_populates="video")
 
+
 class Comment(Base):
     __tablename__ = "Comment"  # Capital 'C' to match the actual table name
 
@@ -31,4 +41,3 @@ class Comment(Base):
     user_id = Column(Integer)
 
     video = relationship("Video", back_populates="comments")
-
