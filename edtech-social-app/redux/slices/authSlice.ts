@@ -1,6 +1,6 @@
 // edtech-social-app\redux\slices\authSlice.ts
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AppThunk, RootState } from '../store';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { AppThunk, RootState } from "../store";
 
 interface AuthState {
   token: string | null;
@@ -12,11 +12,12 @@ interface AuthState {
 
 // Utility function to get the initial state from localStorage if available
 const getInitialState = (): AuthState => {
-  if (typeof window !== 'undefined') {  // Check if window is defined
+  if (typeof window !== "undefined") {
+    // Check if window is defined
     return {
-      token: localStorage.getItem('token'),
-      username: localStorage.getItem('username'),
-      icon: localStorage.getItem('icon'),
+      token: localStorage.getItem("token"),
+      username: localStorage.getItem("username"),
+      icon: localStorage.getItem("icon"),
       loading: false,
       error: null,
     };
@@ -34,22 +35,26 @@ const getInitialState = (): AuthState => {
 const initialState: AuthState = getInitialState();
 
 const authSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState,
   reducers: {
     authStart(state) {
       state.loading = true;
       state.error = null;
     },
-    authSuccess(state, action: PayloadAction<{ token: string, username: string, icon: string }>) {
+    authSuccess(
+      state,
+      action: PayloadAction<{ token: string; username: string; icon: string }>,
+    ) {
       state.token = action.payload.token;
       state.username = action.payload.username;
       state.icon = action.payload.icon;
       state.loading = false;
-      if (typeof window !== 'undefined') {  // Check if window is defined
-        localStorage.setItem('token', action.payload.token);
-        localStorage.setItem('username', action.payload.username);
-        localStorage.setItem('icon', action.payload.icon);
+      if (typeof window !== "undefined") {
+        // Check if window is defined
+        localStorage.setItem("token", action.payload.token);
+        localStorage.setItem("username", action.payload.username);
+        localStorage.setItem("icon", action.payload.icon);
       }
     },
     authFailure(state, action: PayloadAction<string>) {
@@ -60,16 +65,18 @@ const authSlice = createSlice({
       state.token = null;
       state.username = null;
       state.icon = null;
-      if (typeof window !== 'undefined') {  // Check if window is defined
-        localStorage.removeItem('token');
-        localStorage.removeItem('username');
-        localStorage.removeItem('icon');
+      if (typeof window !== "undefined") {
+        // Check if window is defined
+        localStorage.removeItem("token");
+        localStorage.removeItem("username");
+        localStorage.removeItem("icon");
       }
     },
   },
 });
 
-export const { authStart, authSuccess, authFailure, logout } = authSlice.actions;
+export const { authStart, authSuccess, authFailure, logout } =
+  authSlice.actions;
 export default authSlice.reducer;
 export const selectAuthToken = (state: RootState) => state.auth.token;
 export const selectAuthUsername = (state: RootState) => state.auth.username;
@@ -78,19 +85,21 @@ export const selectAuthLoading = (state: RootState) => state.auth.loading;
 export const selectAuthError = (state: RootState) => state.auth.error;
 
 export const checkAuthToken = (): AppThunk => async (dispatch) => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
   if (token) {
     try {
-      const response = await fetch('http://localhost:8000/token', {
-        method: 'GET',
+      const response = await fetch("http://localhost:8000/token", {
+        method: "GET",
         headers: {
-          'Authorization': `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       if (response.ok) {
         const data = await response.json();
-        dispatch(authSuccess({ token, username: data.username, icon: data.icon }));
+        dispatch(
+          authSuccess({ token, username: data.username, icon: data.icon }),
+        );
       } else {
         dispatch(logout());
       }
@@ -123,7 +132,7 @@ export const registerUser =
             token: data.access_token,
             username: data.username,
             icon: data.icon,
-          })
+          }),
         );
       } else {
         const errorData = await response.json();
@@ -154,7 +163,7 @@ export const loginUser =
             token: data.access_token,
             username: data.username,
             icon: data.icon,
-          })
+          }),
         );
       } else {
         const errorData = await response.json();
@@ -172,20 +181,20 @@ export const loginUser =
 
 /*Updated the logoutUser function to include the token in the request header and call the /logout endpoint. It also dispatches the logout action to reset the authentication state. */
 export const logoutUser = (): AppThunk => async (dispatch) => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
   if (token) {
     try {
-      await fetch('http://localhost:8000/auth/logout', {
-        method: 'POST',
+      await fetch("http://localhost:8000/auth/logout", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`  // Include the token in the request header
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Include the token in the request header
         },
         body: JSON.stringify({ token }),
       });
       dispatch(logout());
     } catch (err: any) {
-      console.error('Logout failed', err);
+      console.error("Logout failed", err);
     }
   }
 };

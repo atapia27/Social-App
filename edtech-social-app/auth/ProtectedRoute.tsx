@@ -1,9 +1,9 @@
 // edtech-social-app\auth\ProtectedRoute.tsx
-import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { useRouter } from 'next/router';
-import { selectAuthToken, checkAuthToken } from '../redux/slices/authSlice';
-import { AppDispatch } from '../redux/store';
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useRouter } from "next/router";
+import { selectAuthToken, checkAuthToken } from "../redux/slices/authSlice";
+import { AppDispatch } from "../redux/store";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -24,7 +24,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 
   useEffect(() => {
     if (mounted && !token) {
-      router.push('/register');
+      router.push("/register");
     }
   }, [mounted, token, router]);
 

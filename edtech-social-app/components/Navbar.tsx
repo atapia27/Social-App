@@ -1,10 +1,21 @@
 //edtech-social-app\components\Navbar.tsx
 import { FC, useEffect, useState } from "react";
 import Link from "next/link";
-import { FiHome, FiUsers, FiBell, FiMessageCircle, FiSettings } from "react-icons/fi";
-import { useDispatch, useSelector } from 'react-redux';
-import { logoutUser, selectAuthToken, selectAuthUsername, selectAuthIcon } from '../redux/slices/authSlice';
-import { AppDispatch } from '../redux/store';
+import {
+  FiHome,
+  FiUsers,
+  FiBell,
+  FiMessageCircle,
+  FiSettings,
+} from "react-icons/fi";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  logoutUser,
+  selectAuthToken,
+  selectAuthUsername,
+  selectAuthIcon,
+} from "../redux/slices/authSlice";
+import { AppDispatch } from "../redux/store";
 
 const Navbar: FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -46,15 +57,25 @@ const Navbar: FC = () => {
       <div className="flex items-center space-x-4 text-sm">
         {token ? (
           <>
-            <img src={icon ? `/icons/${icon}.png` : '/defaultIcon.png'} alt="Profile" className="w-8 h-8 rounded-full" />
+            <img
+              src={icon ? `/icons/${icon}.png` : "/defaultIcon.png"}
+              alt="Profile"
+              className="w-8 h-8 rounded-full"
+            />
             <span>{username}</span>
             <FiSettings className="w-6 h-6" />
-            <button onClick={handleLogout} className="text-sm text-white">Logout</button>
+            <button onClick={handleLogout} className="text-sm text-white">
+              Logout
+            </button>
           </>
         ) : (
           <>
-            <Link href="/login" className="text-sm text-white">Login</Link>
-            <Link href="/register" className="text-sm text-white">Register</Link>
+            <Link href="/login" className="text-sm text-white">
+              Login
+            </Link>
+            <Link href="/register" className="text-sm text-white">
+              Register
+            </Link>
           </>
         )}
       </div>

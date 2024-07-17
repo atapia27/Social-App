@@ -24,7 +24,7 @@ const VideoFeed: React.FC = () => {
   const handleCreateVideo = (
     title: string,
     description: string,
-    videoUrl: string
+    videoUrl: string,
   ) => {
     const newVideo = {
       video_id: String(videos.length + 1),
