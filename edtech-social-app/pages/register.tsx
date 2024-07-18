@@ -84,10 +84,15 @@ const Register = () => {
         </div>
         <div className="flex flex-wrap gap-2">
           {icons.map((iconOption) => (
-            <div
+            <button
               key={iconOption.name}
               className={`border-2 p-2 ${icon === iconOption.name ? "border-blue-500" : "border-gray-200"} transform cursor-pointer rounded-lg transition duration-200 hover:border-gray-400`}
               onClick={() => setIcon(iconOption.name)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  setIcon(iconOption.name);
+                }
+              }}
             >
               <img
                 src={iconOption.image}
@@ -95,7 +100,7 @@ const Register = () => {
                 className="h-12 w-12"
               />
               <span className="text-center text-xs">{iconOption.name}</span>
-            </div>
+            </button>
           ))}
         </div>
         <button
