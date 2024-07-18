@@ -1,4 +1,5 @@
-# backend\users\routers.py
+# backend/users/routers.py
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from datetime import timedelta
@@ -8,7 +9,6 @@ from backend.dependencies import get_db
 from backend import crud, schemas
 
 router = APIRouter()
-
 
 @router.post("/users/")
 async def create_user(user: schemas.User, db: Session = Depends(get_db)):
@@ -29,7 +29,6 @@ async def create_user(user: schemas.User, db: Session = Depends(get_db)):
         "icon": new_user.icon,
     }
 
-
 @router.get("/users/{user_id}")
 async def get_user(user_id: str, db: Session = Depends(get_db)):
     db_user = crud.get_user(db, user_id=user_id)
@@ -38,7 +37,6 @@ async def get_user(user_id: str, db: Session = Depends(get_db)):
             status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
         )
     return db_user
-
 
 @router.get("/users/by-email/{email}")
 async def get_user_by_email(email: str, db: Session = Depends(get_db)):

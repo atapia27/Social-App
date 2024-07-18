@@ -37,8 +37,8 @@ client = TestClient(app)
 # Helper function to create a user
 def create_test_user():
     user_data = {
-        "email": "testuser4@example.com",
-        "username": "testuser4",
+        "email": "testuser6@example.com",
+        "username": "testuser6",
         "icon": "icon_url",
     }
     response = client.post("/users/users/", json=user_data)
@@ -54,19 +54,19 @@ def test_create_user_and_login():
 
     # Login the user
     login_data = {
-        "email": "testuser4@example.com",
+        "email": "testuser6@example.com",
     }
     response = client.post("/auth/login/", json=login_data)
     assert response.status_code == 200
     login_response = response.json()
     assert "access_token" in login_response
-    assert login_response["username"] == "testuser4"
+    assert login_response["username"] == "testuser6"
 
     # Verify the user in the database
     with TestingSessionLocal() as db:
-        db_user = db.query(User).filter(User.email == "testuser4@example.com").first()
+        db_user = db.query(User).filter(User.email == "testuser6@example.com").first()
         assert db_user is not None
-        assert db_user.username == "testuser4"
+        assert db_user.username == "testuser6"
 
 if __name__ == "__main__":
     pytest.main()
