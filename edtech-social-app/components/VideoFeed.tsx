@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import VideoPost from "./VideoPost";
-import CreateVideoForm from "./CreateVideoForm";
+//edtech-social-app\components\VideoFeed.tsx
+import React, { useState } from "react"
+import VideoPost from "./VideoPost"
+import CreateVideoForm from "./CreateVideoForm"
 
 const VideoFeed: React.FC = () => {
   const [videos, setVideos] = useState([
@@ -18,12 +19,12 @@ const VideoFeed: React.FC = () => {
       description: "BMO LoFi",
       videoUrl: "https://www.youtube.com/embed/Ah7i5EFVDqA",
     },
-  ]);
+  ])
 
   const handleCreateVideo = (
     title: string,
     description: string,
-    videoUrl: string
+    videoUrl: string,
   ) => {
     const newVideo = {
       video_id: String(videos.length + 1),
@@ -31,9 +32,9 @@ const VideoFeed: React.FC = () => {
       title,
       description,
       videoUrl,
-    };
-    setVideos([newVideo, ...videos]);
-  };
+    }
+    setVideos([newVideo, ...videos])
+  }
 
   return (
     <div className="container mx-auto py-8">
@@ -49,7 +50,7 @@ const VideoFeed: React.FC = () => {
         ))}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default VideoFeed;
+export default VideoFeed

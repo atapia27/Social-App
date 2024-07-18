@@ -1,16 +1,42 @@
-import { FC } from "react";
-import Link from "next/link";
+//edtech-social-app\components\Navbar.tsx
+import { FC, useEffect, useState } from "react"
+import Link from "next/link"
 import {
   FiHome,
   FiUsers,
   FiBell,
   FiMessageCircle,
   FiSettings,
-} from "react-icons/fi";
+} from "react-icons/fi"
+import { useDispatch, useSelector } from "react-redux"
+import {
+  logoutUser,
+  selectAuthToken,
+  selectAuthUsername,
+  selectAuthIcon,
+} from "../redux/slices/authSlice"
+import { AppDispatch } from "../redux/store"
 
 const Navbar: FC = () => {
+  const dispatch = useDispatch<AppDispatch>()
+  const token = useSelector(selectAuthToken)
+  const username = useSelector(selectAuthUsername)
+  const icon = useSelector(selectAuthIcon)
+
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  const handleLogout = () => {
+    dispatch(logoutUser())
+  }
+
+  if (!mounted) return null
+
   return (
-    <nav className="bg-[#FD9B63] text-white p-4 flex justify-between items-center h-14 sticky top-0 z-50 align-middle">
+    <nav className="sticky top-0 z-50 flex h-14 items-center justify-between bg-[#FD9B63] p-4 align-middle text-white">
       <div className="">
         <img src="/FULL_LOGO_COLOR.png" alt="Logo" className="h-8" />
       </div>
@@ -28,13 +54,33 @@ const Navbar: FC = () => {
           <FiMessageCircle />
         </Link>
       </div>
-      <div className="flex items-center space-x-4 text-sm ">
-        <img src="/DogPFP.png" alt="Profile" className="w-8 h-8 rounded-full" />
-        <span>Username</span>
-        <FiSettings className="w-6 h-6" />
+      <div className="flex items-center space-x-4 text-sm">
+        {token ? (
+          <>
+            <img
+              src={icon ? `/icons/${icon}.png` : "/defaultIcon.png"}
+              alt="Profile"
+              className="h-8 w-8 rounded-full"
+            />
+            <span>{username}</span>
+            <FiSettings className="h-6 w-6" />
+            <button onClick={handleLogout} className="text-sm text-white">
+              Logout
+            </button>
+          </>
+        ) : (
+          <>
+            <Link href="/login" className="text-sm text-white">
+              Login
+            </Link>
+            <Link href="/register" className="text-sm text-white">
+              Register
+            </Link>
+          </>
+        )}
       </div>
     </nav>
-  );
-};
+  )
+}
 
-export default Navbar;
+export default Navbar

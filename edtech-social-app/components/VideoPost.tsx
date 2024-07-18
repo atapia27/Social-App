@@ -1,11 +1,12 @@
-import React, { useState } from "react";
-import { FiThumbsUp, FiMessageSquare, FiShare } from "react-icons/fi";
-import CommentForm from "./CommentForm";
+//edtech-social-app\components\VideoPost.tsx
+import React, { useState } from "react"
+import { FiThumbsUp, FiMessageSquare, FiShare } from "react-icons/fi"
+import CommentForm from "./CommentForm"
 
 interface VideoPostProps {
-  title: string;
-  description: string;
-  videoUrl: string;
+  title: string
+  description: string
+  videoUrl: string
 }
 
 const VideoPost: React.FC<VideoPostProps> = ({
@@ -13,14 +14,14 @@ const VideoPost: React.FC<VideoPostProps> = ({
   description,
   videoUrl,
 }) => {
-  const [showCommentForm, setShowCommentForm] = useState(false);
+  const [showCommentForm, setShowCommentForm] = useState(false)
 
   const toggleCommentForm = () => {
-    setShowCommentForm(!showCommentForm);
-  };
+    setShowCommentForm(!showCommentForm)
+  }
 
   return (
-    <div className="mx-auto w-[55%] mb-8 bg-white rounded-lg shadow-md">
+    <div className="mx-auto mb-8 w-[55%] rounded-lg bg-white shadow-md">
       <div className="relative">
         <iframe
           className="w-full rounded-t-lg"
@@ -34,26 +35,26 @@ const VideoPost: React.FC<VideoPostProps> = ({
         <h2 className="text-lg font-semibold">{title}</h2>
         <p className="text-sm text-gray-600">{description}</p>
         {showCommentForm && <CommentForm videoId="video123" />}
-        <div className="border-t border-gray-200 mt-2 pt-2 px-14 flex items-center justify-between text-sm ">
+        <div className="mt-2 flex items-center justify-between border-t border-gray-200 px-14 pt-2 text-sm">
           <button className="flex items-center text-gray-500 hover:text-gray-700">
             <FiThumbsUp className="mr-1" />
             Like
           </button>
           <button
-            className="flex items-center ml-4 text-gray-500 hover:text-gray-700"
+            className="ml-4 flex items-center text-gray-500 hover:text-gray-700"
             onClick={toggleCommentForm}
           >
             <FiMessageSquare className="mr-1" />
             Comment
           </button>
-          <button className="flex items-center ml-4 text-gray-500 hover:text-gray-700">
+          <button className="ml-4 flex items-center text-gray-500 hover:text-gray-700">
             <FiShare className="mr-1" />
             Share
           </button>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default VideoPost;
+export default VideoPost
