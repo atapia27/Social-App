@@ -6,7 +6,7 @@ from sqlalchemy.orm import sessionmaker, declarative_base
 from dotenv import load_dotenv
 import os
 
-load_dotenv()
+load_dotenv(dotenv_path="backend/.env")
 
 # Fetch the database URL from environment variables
 SQLALCHEMY_DATABASE_URL = os.environ.get("DATABASE_URL")

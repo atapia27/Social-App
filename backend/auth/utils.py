@@ -17,11 +17,16 @@ UTC = timezone.utc
 
 def create_access_token(data: dict, expires_delta: timedelta = None):
     to_encode = data.copy()
-    expire = datetime.now(timezone.utc) + expires_delta if expires_delta else datetime.now(timezone.utc) + timedelta(minutes=5)
+    expire = (
+        datetime.now(timezone.utc) + expires_delta
+        if expires_delta
+        else datetime.now(timezone.utc) + timedelta(minutes=5)
+    )
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     logger.info("Access token created with expiration: %s", expire)
     return encoded_jwt
+
 
 async def verify_token(request: Request, token: str = Depends(oauth2_scheme)):
     try:
@@ -50,6 +55,7 @@ async def verify_token(request: Request, token: str = Depends(oauth2_scheme)):
             detail="Could not validate credentials",
             headers={"WWW-Authenticate": "Bearer"},
         )
+
 
 async def get_current_user(token: str = Security(oauth2_scheme)):
     try:

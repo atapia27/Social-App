@@ -7,10 +7,8 @@ npm install -D prettier prettier-plugin-tailwindcss
 Edit:
 .prettierrc
 {
-  "plugins": ["prettier-plugin-tailwindcss"]
+"plugins": ["prettier-plugin-tailwindcss"]
 }
-
 
 Running Formatters:
 npx prettier . --write
-

@@ -17,6 +17,7 @@ logger = logging.getLogger(__name__)
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
+
 @router.post("/login")
 async def login_user(request: schemas.LoginRequest, db: Session = Depends(get_db)):
     logger.info("Attempting to log in user with email: %s", request.email)
@@ -34,7 +35,9 @@ async def login_user(request: schemas.LoginRequest, db: Session = Depends(get_db
             pass
 
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(data={"sub": db_user.email}, expires_delta=access_token_expires)
+    access_token = create_access_token(
+        data={"sub": db_user.email}, expires_delta=access_token_expires
+    )
 
     db_user.token = access_token
     db.commit()
@@ -59,8 +62,11 @@ async def login_user(request: schemas.LoginRequest, db: Session = Depends(get_db
 
     return response
 
+
 @router.post("/logout")
-async def logout_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+async def logout_user(
+    token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)
+):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         email: str = payload.get("sub")
@@ -78,20 +84,31 @@ async def logout_user(token: str = Depends(oauth2_scheme), db: Session = Depends
         logger.warning("Logout attempted with expired or invalid token")
         return response
 
+
 @router.get("/token")
-async def read_token(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+async def read_token(
+    token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)
+):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         email: str = payload.get("sub")
         if not email:
             logger.warning("Invalid token: no email found")
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token"
+            )
         db_user = crud.get_user_by_email(db, email=email)
         if db_user is None or db_user.token != token:
             logger.warning("User not found or token mismatch: %s", email)
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
+            )
         logger.info("Token read successfully for user: %s", email)
-        return {"email": db_user.email, "username": db_user.username, "icon": db_user.icon}
+        return {
+            "email": db_user.email,
+            "username": db_user.username,
+            "icon": db_user.icon,
+        }
     except JWTError as e:
         logger.warning("Invalid token: %s", e)
         raise HTTPException(
