@@ -6,7 +6,7 @@ from sqlalchemy import (
     String,
 )  # Ensure this import is present
 from sqlalchemy.orm import relationship
-from database import Base
+from backend.database import Base
 
 
 class User(Base):

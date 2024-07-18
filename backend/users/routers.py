@@ -2,9 +2,9 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from datetime import timedelta
-from config import ACCESS_TOKEN_EXPIRE_MINUTES
-from auth.utils import create_access_token
-from dependencies import get_db
+from backend.config import ACCESS_TOKEN_EXPIRE_MINUTES
+from backend.auth.utils import create_access_token
+from backend.dependencies import get_db
 from backend import crud, schemas
 
 router = APIRouter()

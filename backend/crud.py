@@ -1,6 +1,6 @@
 # backend\crud.py
 from sqlalchemy.orm import Session
-from . import models, schemas
+from backend import models, schemas
 
 
 def create_user(db: Session, user: schemas.User):
