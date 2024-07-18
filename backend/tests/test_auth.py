@@ -18,6 +18,7 @@ engine = create_engine(SQLALCHEMY_DATABASE_URL)
 # Configure session maker for testing
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
+
 # Dependency override to use the test database
 def override_get_db():
     try:
@@ -26,23 +27,33 @@ def override_get_db():
     finally:
         db.close()
 
+
 app.dependency_overrides[get_db] = override_get_db
 
+
+# Reset the test database
+def reset_test_database():
+    Base.metadata.drop_all(bind=engine)
+    Base.metadata.create_all(bind=engine)
+
+
 # Initialize the test database
-Base.metadata.create_all(bind=engine)
+reset_test_database()
 
 # Initialize the TestClient with our FastAPI app
 client = TestClient(app)
 
+
 # Helper function to create a user
 def create_test_user():
     user_data = {
-        "email": "testuser6@example.com",
-        "username": "testuser6",
+        "email": "testuser@example.com",
+        "username": "testuser",
         "icon": "icon_url",
     }
     response = client.post("/users/users/", json=user_data)
     return response
+
 
 # Test case to create a user and verify login
 def test_create_user_and_login():
@@ -54,19 +65,20 @@ def test_create_user_and_login():
 
     # Login the user
     login_data = {
-        "email": "testuser6@example.com",
+        "email": "testuser@example.com",
     }
     response = client.post("/auth/login/", json=login_data)
     assert response.status_code == 200
     login_response = response.json()
     assert "access_token" in login_response
-    assert login_response["username"] == "testuser6"
+    assert login_response["username"] == "testuser"
 
     # Verify the user in the database
     with TestingSessionLocal() as db:
-        db_user = db.query(User).filter(User.email == "testuser6@example.com").first()
+        db_user = db.query(User).filter(User.email == "testuser@example.com").first()
         assert db_user is not None
-        assert db_user.username == "testuser6"
+        assert db_user.username == "testuser"
+
 
 if __name__ == "__main__":
     pytest.main()

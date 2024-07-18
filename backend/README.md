@@ -1,10 +1,21 @@
 requirements.txt 
+``` bash
+pip freeze | xargs pip uninstall -y
 
-pip install black
-pip install pipreqs
-pipreqs /path/to/project
+.venv\Scripts\activate
+pip install -r backend/requirements.txt
+
+```
+
+
+OPTIONAL STEP BETWEEM:
+``` bash
+pip install pipreqs (optional)
+```
+
 
 Running Formatters:
-
+``` bash
 cd backend
 black .
+```
