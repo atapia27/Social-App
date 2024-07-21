@@ -1,12 +1,12 @@
 # backend/auth/utils.py
 
 import logging
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta, timezone, time
 from jose import jwt, JWTError, ExpiredSignatureError
 from fastapi import HTTPException, Request, Security, Depends, status
 from fastapi.security import OAuth2PasswordBearer
 from backend import schemas
-from backend.config import SECRET_KEY, ALGORITHM
+from backend.config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
 
 logger = logging.getLogger(__name__)
 
@@ -14,23 +14,26 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 UTC = timezone.utc
 
-
 def create_access_token(data: dict, expires_delta: timedelta = None):
     to_encode = data.copy()
-    expire = (
-        datetime.now(timezone.utc) + expires_delta
-        if expires_delta
-        else datetime.now(timezone.utc) + timedelta(minutes=5)
-    )
+    expires_delta = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    expire = datetime.now(timezone.utc) + expires_delta
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     logger.info("Access token created with expiration: %s", expire)
     return encoded_jwt
 
+def decode_jwt(token: str, secret_key: str, algorithms: list):
+    try:
+        return jwt.decode(token, secret_key, algorithms=algorithms)
+    except JWTError as e:
+        raise e
+
+# Example of using the decode_jwt function in your verify_token and get_current_user functions
 
 async def verify_token(request: Request, token: str = Depends(oauth2_scheme)):
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        payload = decode_jwt(token, SECRET_KEY, algorithms=[ALGORITHM])
         email: str = payload.get("sub")
         if not email:
             logger.warning("Token verification failed: no email found")
@@ -59,7 +62,7 @@ async def verify_token(request: Request, token: str = Depends(oauth2_scheme)):
 
 async def get_current_user(token: str = Security(oauth2_scheme)):
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        payload = decode_jwt(token, SECRET_KEY, algorithms=[ALGORITHM])
         email: str = payload.get("sub")
         if not email:
             logger.warning("Token verification failed: no email found")

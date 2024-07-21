@@ -16,6 +16,7 @@ import {
   selectAuthIcon,
 } from "../redux/slices/authSlice"
 import { AppDispatch } from "../redux/store"
+import Image from "next/image"
 
 const Navbar: FC = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -36,10 +37,16 @@ const Navbar: FC = () => {
   if (!mounted) return null
 
   return (
-    <nav className="sticky top-0 z-50 flex h-14 items-center justify-between bg-[#FD9B63] p-4 align-middle text-white">
-      <div className="">
-        <img src="/FULL_LOGO_COLOR.png" alt="Logo" className="h-8" />
-      </div>
+    <nav className="sticky top-0 z-50 flex h-14 items-center justify-between gap-3 bg-[#FD9B63] p-4 align-middle text-white">
+      <Link href="/">
+          <Image
+            src="/FULL_LOGO_COLOR.png"
+            alt="Logo"
+            width={100}
+            height={100}
+            className="ml-10"
+          />
+      </Link>
       <div className="flex space-x-20 text-xl">
         <Link href="/" className="flex items-center space-x-1">
           <FiHome />
@@ -54,12 +61,14 @@ const Navbar: FC = () => {
           <FiMessageCircle />
         </Link>
       </div>
-      <div className="flex items-center space-x-4 text-sm">
+      <div className="mr-10 flex items-center space-x-4 text-sm">
         {token ? (
           <>
-            <img
+            <Image
               src={icon ? `/icons/${icon}.png` : "/defaultIcon.png"}
               alt="Profile"
+              width={32}
+              height={32}
               className="h-8 w-8 rounded-full"
             />
             <span>{username}</span>

@@ -17,11 +17,10 @@ logger = logging.getLogger(__name__)
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
-
 @router.post("/login")
 async def login_user(request: schemas.LoginRequest, db: Session = Depends(get_db)):
     logger.info("Attempting to log in user with email: %s", request.email)
-    db_user = crud.get_user_by_email(db, email=request.email)
+    db_user = crud.retrieve_user_by_email(db, email=request.email)
     if not db_user:
         logger.warning("User not found: %s", request.email)
         raise HTTPException(status_code=404, detail="User not found")
@@ -70,20 +69,31 @@ async def logout_user(
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         email: str = payload.get("sub")
-        db_user = crud.get_user_by_email(db, email=email)
+        db_user = crud.retrieve_user_by_email(db, email=email)
         if db_user:
-            db_user.token = None
+            if db_user.token is None or db_user.token != token:
+                logger.warning("Attempt to logout with an invalid or already invalidated token for user: %s", email)
+                response = JSONResponse(content={"message": "Token already expired or invalid"}, status_code=status.HTTP_401_UNAUTHORIZED)
+                response.delete_cookie(key="access_token")
+                return response
+            db_user.token = None 
             db.commit()
-        response = JSONResponse(content={"message": "Successfully logged out"})
+            logger.info("Token set to None for user: %s", email)
+            response = JSONResponse(content={"message": "Successfully logged out"})
+            response.delete_cookie(key="access_token")
+            return response
+        else:
+            logger.warning("User not found for email: %s", email)
+            return JSONResponse(content={"message": "User not found"}, status_code=status.HTTP_404_NOT_FOUND)
+    except JWTError as e:
+        logger.warning("JWTError during logout: %s", e)
+        response = JSONResponse(content={"message": "Token already expired or invalid"}, status_code=status.HTTP_401_UNAUTHORIZED)
         response.delete_cookie(key="access_token")
-        logger.info("User logged out successfully: %s", email)
         return response
-    except JWTError:
-        response = JSONResponse(content={"message": "Token already expired or invalid"})
-        response.delete_cookie(key="access_token")
-        logger.warning("Logout attempted with expired or invalid token")
+    except Exception as e:
+        logger.error("Exception during logout: %s", e)
+        response = JSONResponse(content={"message": "Logout failed due to server error"}, status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return response
-
 
 @router.get("/token")
 async def read_token(
@@ -97,7 +107,7 @@ async def read_token(
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token"
             )
-        db_user = crud.get_user_by_email(db, email=email)
+        db_user = crud.retrieve_user_by_email(db, email=email)
         if db_user is None or db_user.token != token:
             logger.warning("User not found or token mismatch: %s", email)
             raise HTTPException(

@@ -10,6 +10,7 @@ import {
   selectAuthLoading,
 } from "../redux/slices/authSlice"
 import { AppDispatch, RootState } from "../redux/store"
+import Image from "next/image"
 
 const Register = () => {
   const [email, setEmail] = useState("")
@@ -90,14 +91,15 @@ const Register = () => {
               onClick={() => setIcon(iconOption.name)}
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") {
-                  setIcon(iconOption.name);
+                  setIcon(iconOption.name)
                 }
               }}
             >
-              <img
+              <Image
                 src={iconOption.image}
                 alt={iconOption.name}
-                className="h-12 w-12"
+                width={48}
+                height={48}
               />
               <span className="text-center text-xs">{iconOption.name}</span>
             </button>
