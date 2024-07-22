@@ -8,15 +8,20 @@ class User(BaseModel):
     icon: str
 
 
-class Video(BaseModel):
-    user_id: int
+class CreateVideo(BaseModel):
+    user_id: str
     description: str
     video_url: str
     title: str
+    
+class EditVideo(BaseModel):
+    video_id: str
+    description: str
+    title: str
 
 
-class Comment(BaseModel):
-    video_id: int
+class CreateComment(BaseModel):
+    video_id: str
     content: str
     user_id: str
 
@@ -29,3 +34,4 @@ class TokenData(BaseModel):
 # New addition
 class LoginRequest(BaseModel):
     email: str
+
