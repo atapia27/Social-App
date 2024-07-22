@@ -15,7 +15,7 @@ def create_user(db: Session, user: schemas.User):
 def update_user_token(db: Session, user_id: int, token: str):
     db_user = db.query(models.User).filter(models.User.id == user_id).first()
     if db_user:
-        db_user.token = token
+        db_user.token = token # Update the token
         db.commit()
         db.refresh(db_user)
         return db_user

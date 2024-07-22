@@ -7,6 +7,8 @@ from backend.config import ACCESS_TOKEN_EXPIRE_MINUTES
 from backend.auth.utils import create_access_token
 from backend.dependencies import get_db
 from backend import crud, schemas
+from fastapi.responses import JSONResponse
+
 
 router = APIRouter()
 
@@ -23,12 +25,16 @@ async def post_user(user: schemas.User, db: Session = Depends(get_db)):
         data={"sub": new_user.email}, expires_delta=access_token_expires
     )
     db_user = crud.update_user_token(db=db, user_id=new_user.id, token=access_token)  # Update the db_user with the access token
-    return {
-        "access_token": access_token,
-        "token_type": "bearer",
-        "username": new_user.username,
-        "icon": new_user.icon,
-    }
+
+    response = JSONResponse(
+        content={
+            "access_token": access_token,
+            "token_type": "bearer",
+            "username": new_user.username,
+            "icon": new_user.icon,
+        }
+    )
+    return response
 
 @router.get("/users/{user_id}")
 async def get_user(user_id: str, db: Session = Depends(get_db)):

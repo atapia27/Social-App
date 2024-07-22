@@ -52,9 +52,9 @@ def register_user(email, username, icon):
     return response
 
 # Test case to verify that a user automatically logs in after registration, so you cannot login again
-def test_register_and_login_user():
-    unique_email = "testuser_create_login@example.com"
-    unique_username = "testuser_create_login"
+def test_login_after_register():
+    unique_email = "testuser_login_after_register@example.com"
+    unique_username = "testuser_login_after_register"
     unique_icon = "icon_1"
 
     # Register the user
@@ -83,7 +83,7 @@ def test_attempt_logout_twice():
     user_data = response.json()
     assert "access_token" in user_data
     access_token = user_data["access_token"]
-    
+
     # First logout attempt
     headers = {"Authorization": f"Bearer {access_token}"}
     response = client.post("/auth/logout", headers=headers)
@@ -119,8 +119,6 @@ def test_register_performs_auto_login():
         print (f"db_user.token: {db_user.token}")
         assert access_token == db_user.token
 
-
-
 # Test case to verify that a user can be registered and then logged out successfully
 def test_register_and_logout_user():
     unique_email = "testuser_logout@example.com"
@@ -153,6 +151,8 @@ def test_register_and_logout_user():
         db_user = db.query(User).filter(User.email == unique_email).first()
         assert db_user is not None
         assert db_user.token is None
+
+
 
 if __name__ == "__main__":
     pytest.main()

@@ -51,14 +51,6 @@ async def login_user(request: schemas.LoginRequest, db: Session = Depends(get_db
         }
     )
 
-    response.set_cookie(
-        key="access_token",
-        value=access_token,
-        httponly=True,
-        secure=True,
-        samesite="Lax",
-    )
-
     return response
 
 
