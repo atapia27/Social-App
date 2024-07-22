@@ -22,6 +22,7 @@ async def post_user(user: schemas.User, db: Session = Depends(get_db)):
     access_token = create_access_token(
         data={"sub": new_user.email}, expires_delta=access_token_expires
     )
+    db_user = crud.update_user_token(db=db, user_id=new_user.id, token=access_token)  # Update the db_user with the access token
     return {
         "access_token": access_token,
         "token_type": "bearer",

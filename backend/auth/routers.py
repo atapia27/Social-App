@@ -71,17 +71,20 @@ async def logout_user(
         email: str = payload.get("sub")
         db_user = crud.retrieve_user_by_email(db, email=email)
         if db_user:
-            if db_user.token is None or db_user.token != token:
+            # This check ensures that the token provided is the one currently associated with the user.
+            # If the token matches, proceed to invalidate it.
+            if db_user.token == token:
+                db_user.token = None
+                db.commit()
+                logger.info("Token invalidated for user: %s", email)
+                response = JSONResponse(content={"message": "Successfully logged out"})
+                response.delete_cookie(key="access_token")
+                return response
+            else:
                 logger.warning("Attempt to logout with an invalid or already invalidated token for user: %s", email)
                 response = JSONResponse(content={"message": "Token already expired or invalid"}, status_code=status.HTTP_401_UNAUTHORIZED)
                 response.delete_cookie(key="access_token")
                 return response
-            db_user.token = None 
-            db.commit()
-            logger.info("Token set to None for user: %s", email)
-            response = JSONResponse(content={"message": "Successfully logged out"})
-            response.delete_cookie(key="access_token")
-            return response
         else:
             logger.warning("User not found for email: %s", email)
             return JSONResponse(content={"message": "User not found"}, status_code=status.HTTP_404_NOT_FOUND)

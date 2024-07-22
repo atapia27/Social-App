@@ -40,7 +40,7 @@ reset_test_database()
 client = TestClient(app)
 
 # Helper function to create a user with unique data for testing
-def register_test_user(email, username, icon):
+def register_user(email, username, icon):
     user_data = {
         "email": email,
         "username": username,
@@ -51,85 +51,39 @@ def register_test_user(email, username, icon):
         print(f"User creation failed: {response.status_code}, {response.json()}")
     return response
 
-# Test case to verify that a user can be created and then logged in successfully
-def test_register_user_and_verify_login():
+# Test case to verify that a user automatically logs in after registration, so you cannot login again
+def test_register_and_login_user():
     unique_email = "testuser_create_login@example.com"
     unique_username = "testuser_create_login"
     unique_icon = "icon_1"
 
-    # Create a user
-    response = register_test_user(unique_email, unique_username, unique_icon)
+    # Register the user
+    response = register_user(unique_email, unique_username, unique_icon)
     assert response.status_code == 200
     user_data = response.json()
     assert "access_token" in user_data
 
-    # Attempt to login the newly created user
+    # Attempt to login the user again, expecting a 400 error
     login_data = {"email": unique_email}
     response = client.post("/auth/login/", json=login_data)
-    assert response.status_code == 200
-    login_response = response.json()
-    assert "access_token" in login_response
-    assert login_response["username"] == unique_username
-
-    # Verify the user is correctly stored in the database
-    with TestingSessionLocal() as db:
-        db_user = db.query(User).filter(User.email == unique_email).first()
-        assert db_user is not None
-        assert db_user.username == unique_username
-
-# Test case to verify that a user can log out successfully
-def test_create_and_logout_user():
-    unique_email = "testuser_logout@example.com"
-    unique_username = "testuser_logout"
-    unique_icon = "icon_2"
-
-    # Create and login the user
-    response = register_test_user(unique_email, unique_username, unique_icon)
-    assert response.status_code == 200
-    user_data = response.json()
-    assert "access_token" in user_data
-
-    # Attempt to logout the user
-    login_data = {"email": unique_email}
-    response = client.post("/auth/login/", json=login_data)
-    assert response.status_code == 200
-    login_response = response.json()
-    access_token = login_response["access_token"]
-    assert "access_token" in login_response
-
-    # Logout the user using the access token
-    headers = {"Authorization": f"Bearer {access_token}"}
-    response = client.post("/auth/logout", headers=headers)
-    assert response.status_code == 200
-    logout_response = response.json()
-    assert logout_response["message"] == "Successfully logged out"
-
-    # Verify the token is invalidated in the database
-    with TestingSessionLocal() as db:
-        db_user = db.query(User).filter(User.email == unique_email).first()
-        assert db_user is not None
-        assert db_user.token is None
+    assert response.status_code == 400
+    
+    error_response = response.json()
+    assert error_response["detail"] == "User already logged in"
 
 # Test case to verify that logging out with an already used token is handled correctly
-def test_login_and_attempt_logout_twice():
+def test_attempt_logout_twice():
     unique_email = "testuser_relogin@example.com"
     unique_username = "testuser_relogin"
     unique_icon = "icon_3"
 
-    # Create and login the user
-    response = register_test_user(unique_email, unique_username, unique_icon)
+    # Register the user
+    response = register_user(unique_email, unique_username, unique_icon)
     assert response.status_code == 200
     user_data = response.json()
     assert "access_token" in user_data
-
-    # Attempt to logout the user twice, expecting the second attempt to fail
-    login_data = {"email": unique_email}
-    response = client.post("/auth/login/", json=login_data)
-    assert response.status_code == 200
-    login_response = response.json()
-    access_token = login_response["access_token"]
-    assert "access_token" in login_response
-
+    access_token = user_data["access_token"]
+    
     # First logout attempt
     headers = {"Authorization": f"Bearer {access_token}"}
     response = client.post("/auth/logout", headers=headers)
@@ -144,24 +98,61 @@ def test_login_and_attempt_logout_twice():
     assert error_response["message"] == "Token already expired or invalid"
 
 # Test case to verify that a user is automatically logged in upon registration
-def test_register_and_auto_login():
+def test_register_performs_auto_login():
     unique_email = "testuser_auto_login@example.com"
     unique_username = "testuser_auto_login"
     unique_icon = "icon_4"
 
     # Register the user and verify automatic login
-    response = register_test_user(unique_email, unique_username, unique_icon)
+    response = register_user(unique_email, unique_username, unique_icon)
     assert response.status_code == 200
     user_data = response.json()
+    access_token = user_data["access_token"]
     assert "access_token" in user_data
+    print(f"access_token: {access_token}")
 
-    # Verify the user is logged in automatically by checking the access token
-    login_data = {"email": unique_email}
-    response = client.post("/auth/login/", json=login_data)
+    # Verify the user is correctly stored in the database
+    with TestingSessionLocal() as db:
+        db_user = db.query(User).filter(User.email == unique_email).first()
+        assert db_user is not None
+        assert db_user.username == unique_username
+        print (f"db_user.token: {db_user.token}")
+        assert access_token == db_user.token
+
+
+
+# Test case to verify that a user can be registered and then logged out successfully
+def test_register_and_logout_user():
+    unique_email = "testuser_logout@example.com"
+    unique_username = "testuser_logout"
+    unique_icon = "icon_2"
+
+    # Register the user
+    response = register_user(unique_email, unique_username, unique_icon)
     assert response.status_code == 200
-    login_response = response.json()
-    assert "access_token" in login_response
-    assert login_response["username"] == unique_username
+    register_response = response.json()
+    access_token = register_response["access_token"]
+    assert "access_token" in register_response
+
+    # check token is valid
+    assert access_token is not None 
+    assert access_token != ""
+    print(f"access_token: {access_token}")
+
+    # Logout the user using the access token
+    headers = {"Authorization": f"Bearer {access_token}"}
+    response = client.post("/auth/logout", headers=headers)
+
+    # check response status code
+    assert response.status_code == 200
+    logout_response = response.json()
+    assert logout_response["message"] == "Successfully logged out"
+
+    # Verify the token is invalidated in the database
+    with TestingSessionLocal() as db:
+        db_user = db.query(User).filter(User.email == unique_email).first()
+        assert db_user is not None
+        assert db_user.token is None
 
 if __name__ == "__main__":
     pytest.main()
