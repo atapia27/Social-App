@@ -14,6 +14,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 UTC = timezone.utc
 
+
 def create_access_token(data: dict, expires_delta: timedelta = None):
     to_encode = data.copy()
     expires_delta = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
@@ -23,13 +24,16 @@ def create_access_token(data: dict, expires_delta: timedelta = None):
     logger.info("Access token created with expiration: %s", expire)
     return encoded_jwt
 
+
 def decode_jwt(token: str, secret_key: str, algorithms: list):
     try:
         return jwt.decode(token, secret_key, algorithms=algorithms)
     except JWTError as e:
         raise e
 
+
 # Example of using the decode_jwt function in your verify_token and get_current_user functions
+
 
 async def verify_token(request: Request, token: str = Depends(oauth2_scheme)):
     try:

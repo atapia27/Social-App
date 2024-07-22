@@ -44,7 +44,7 @@ const Navbar: FC = () => {
             alt="Logo"
             width={100}
             height={100}
-            className="ml-10"
+            className="ml-10 w-auto h-auto"
           />
       </Link>
       <div className="flex space-x-20 text-xl">

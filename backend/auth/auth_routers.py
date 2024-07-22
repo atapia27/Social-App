@@ -17,6 +17,7 @@ logger = logging.getLogger(__name__)
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
+
 @router.post("/login")
 async def login_user(request: schemas.LoginRequest, db: Session = Depends(get_db)):
     logger.info("Attempting to log in user with email: %s", request.email)
@@ -73,19 +74,34 @@ async def logout_user(
                 response.delete_cookie(key="access_token")
                 return response
             else:
-                logger.warning("Attempt to logout with an invalid or already invalidated token for user: %s", email)
-                response = JSONResponse(content={"message": "Token already expired or invalid"}, status_code=status.HTTP_401_UNAUTHORIZED)
+                logger.warning(
+                    "Attempt to logout with an invalid or already invalidated token for user: %s",
+                    email,
+                )
+                response = JSONResponse(
+                    content={"message": "Token already expired or invalid"},
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                )
                 response.delete_cookie(key="access_token")
                 return response
         else:
             logger.warning("User not found for email: %s", email)
-            return JSONResponse(content={"message": "User not found"}, status_code=status.HTTP_404_NOT_FOUND)
+            return JSONResponse(
+                content={"message": "User not found"},
+                status_code=status.HTTP_404_NOT_FOUND,
+            )
     except JWTError as e:
         logger.warning("JWTError during logout: %s", e)
-        response = JSONResponse(content={"message": "Token already expired or invalid"}, status_code=status.HTTP_401_UNAUTHORIZED)
+        response = JSONResponse(
+            content={"message": "Token already expired or invalid"},
+            status_code=status.HTTP_401_UNAUTHORIZED,
+        )
         response.delete_cookie(key="access_token")
         return response
     except Exception as e:
         logger.error("Exception during logout: %s", e)
-        response = JSONResponse(content={"message": "Logout failed due to server error"}, status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        response = JSONResponse(
+            content={"message": "Logout failed due to server error"},
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        )
         return response

@@ -17,6 +17,7 @@ engine = create_engine(SQLALCHEMY_DATABASE_URL)
 # Configure session maker for testing, disabling autocommit and autoflush for transactions
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
+
 # Dependency override function to use the test database session
 def override_get_db():
     try:
@@ -25,19 +26,23 @@ def override_get_db():
     finally:
         db.close()
 
+
 # Apply the dependency override for the database session
 app.dependency_overrides[get_db] = override_get_db
+
 
 # Function to reset the test database by dropping all tables and recreating them
 def reset_test_database():
     Base.metadata.drop_all(bind=engine)
     Base.metadata.create_all(bind=engine)
 
+
 # Initialize the test database
 reset_test_database()
 
 # Initialize the TestClient with our FastAPI app for making test requests
 client = TestClient(app)
+
 
 # Helper function to create a user with unique data for testing
 def register_user(email, username, icon):
@@ -50,6 +55,7 @@ def register_user(email, username, icon):
     if response.status_code != 200:
         print(f"User creation failed: {response.status_code}, {response.json()}")
     return response
+
 
 # Test case to verify that a user automatically logs in after registration, so you cannot login again
 def test_login_after_register():
@@ -67,9 +73,10 @@ def test_login_after_register():
     login_data = {"email": unique_email}
     response = client.post("/auth/login/", json=login_data)
     assert response.status_code == 400
-    
+
     error_response = response.json()
     assert error_response["detail"] == "User already logged in"
+
 
 # Test case to verify that logging out with an already used token is handled correctly
 def test_attempt_logout_twice():
@@ -97,6 +104,7 @@ def test_attempt_logout_twice():
     error_response = response.json()
     assert error_response["message"] == "Token already expired or invalid"
 
+
 # Test case to verify that a user is automatically logged in upon registration
 def test_register_performs_auto_login():
     unique_email = "testuser_auto_login@example.com"
@@ -116,8 +124,9 @@ def test_register_performs_auto_login():
         db_user = db.query(User).filter(User.email == unique_email).first()
         assert db_user is not None
         assert db_user.username == unique_username
-        print (f"db_user.token: {db_user.token}")
+        print(f"db_user.token: {db_user.token}")
         assert access_token == db_user.token
+
 
 # Test case to verify that a user can be registered and then logged out successfully
 def test_register_and_logout_user():
@@ -133,7 +142,7 @@ def test_register_and_logout_user():
     assert "access_token" in register_response
 
     # check token is valid
-    assert access_token is not None 
+    assert access_token is not None
     assert access_token != ""
     print(f"access_token: {access_token}")
 
@@ -151,7 +160,6 @@ def test_register_and_logout_user():
         db_user = db.query(User).filter(User.email == unique_email).first()
         assert db_user is not None
         assert db_user.token is None
-
 
 
 if __name__ == "__main__":

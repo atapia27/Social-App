@@ -1,4 +1,4 @@
-# backend/users/routers.py
+# backend/users/user_routers.py
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
@@ -12,6 +12,7 @@ from fastapi.responses import JSONResponse
 
 router = APIRouter()
 
+
 @router.post("/users/")
 async def post_user(user: schemas.User, db: Session = Depends(get_db)):
     db_user = crud.retrieve_user_by_email(db, email=user.email)
@@ -24,7 +25,9 @@ async def post_user(user: schemas.User, db: Session = Depends(get_db)):
     access_token = create_access_token(
         data={"sub": new_user.email}, expires_delta=access_token_expires
     )
-    db_user = crud.update_user_token(db=db, user_id=new_user.id, token=access_token)  # Update the db_user with the access token
+    db_user = crud.update_user_token(
+        db=db, user_id=new_user.id, token=access_token
+    )  # Update the db_user with the access token
 
     response = JSONResponse(
         content={
@@ -36,14 +39,16 @@ async def post_user(user: schemas.User, db: Session = Depends(get_db)):
     )
     return response
 
+
 @router.get("/users/{user_id}")
 async def get_user(user_id: str, db: Session = Depends(get_db)):
-    db_user = crud.retrieve_user(db, user_id=user_id)
+    db_user = crud.retrieve_user_by_id(db, user_id=user_id)
     if db_user is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
         )
     return db_user
+
 
 @router.get("/users/by-email/{email}")
 async def get_user_by_email(email: str, db: Session = Depends(get_db)):
