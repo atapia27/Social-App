@@ -197,3 +197,56 @@
       }
     }
   }
+
+// // Helper function to decode JWT token and check expiry
+// function isTokenExpired(token: string): boolean {
+//   const payloadBase64 = token.split('.')[1];
+//   const decodedJson = Buffer.from(payloadBase64, 'base64').toString();
+//   const decoded = JSON.parse(decodedJson);
+//   const exp = decoded.exp;
+//   const now = Date.now() / 1000;
+//   return exp < now;
+// }
+
+// // Thunk for refreshing the token
+// export const refreshToken = (): AppThunk => async (dispatch, getState) => {
+//   const token = selectAuthToken(getState());
+//   if (token && isTokenExpired(token)) {
+//     try {
+//       const response = await fetch("http://localhost:8000/auth/refresh", {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json",
+//           Authorization: `Bearer ${token}`,
+//         },
+//       });
+
+//       if (response.ok) {
+//         const data = await response.json();
+//         dispatch(authSuccess({
+//           token: data.access_token,
+//           username: data.username,
+//           icon: data.icon,
+//         }));
+//       } else {
+//         dispatch(logout());
+//       }
+//     } catch (error) {
+//       console.error("Token refresh failed", error);
+//       dispatch(logout());
+//     }
+//   }
+// };
+
+// // Modify loginUser and other thunks to check for token expiry
+// export const loginUser = (email: string): AppThunk => async (dispatch) => {
+//   dispatch(authStart());
+//   try {
+//     // Your existing login logic here
+
+//     // After successful login, check and refresh token if needed
+//     dispatch(refreshToken());
+//   } catch (err: any) {
+//     dispatch(authFailure(err.toString()));
+//   }
+// };

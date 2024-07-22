@@ -89,35 +89,3 @@ async def logout_user(
         logger.error("Exception during logout: %s", e)
         response = JSONResponse(content={"message": "Logout failed due to server error"}, status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return response
-
-@router.get("/token")
-async def read_token(
-    token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)
-):
-    try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        email: str = payload.get("sub")
-        if not email:
-            logger.warning("Invalid token: no email found")
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token"
-            )
-        db_user = crud.retrieve_user_by_email(db, email=email)
-        if db_user is None or db_user.token != token:
-            logger.warning("User not found or token mismatch: %s", email)
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
-            )
-        logger.info("Token read successfully for user: %s", email)
-        return {
-            "email": db_user.email,
-            "username": db_user.username,
-            "icon": db_user.icon,
-        }
-    except JWTError as e:
-        logger.warning("Invalid token: %s", e)
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=f"Invalid token: {e}",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
