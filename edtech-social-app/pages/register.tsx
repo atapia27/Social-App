@@ -10,6 +10,7 @@ import {
   selectAuthLoading,
 } from "../redux/slices/authSlice"
 import { AppDispatch, RootState } from "../redux/store"
+import Image from "next/image"
 
 const Register = () => {
   const [email, setEmail] = useState("")
@@ -84,18 +85,24 @@ const Register = () => {
         </div>
         <div className="flex flex-wrap gap-2">
           {icons.map((iconOption) => (
-            <div
+            <button
               key={iconOption.name}
               className={`border-2 p-2 ${icon === iconOption.name ? "border-blue-500" : "border-gray-200"} transform cursor-pointer rounded-lg transition duration-200 hover:border-gray-400`}
               onClick={() => setIcon(iconOption.name)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  setIcon(iconOption.name)
+                }
+              }}
             >
-              <img
+              <Image
                 src={iconOption.image}
                 alt={iconOption.name}
-                className="h-12 w-12"
+                width={48}
+                height={48}
               />
               <span className="text-center text-xs">{iconOption.name}</span>
-            </div>
+            </button>
           ))}
         </div>
         <button

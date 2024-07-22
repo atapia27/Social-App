@@ -11,4 +11,5 @@ Edit:
 }
 
 Running Formatters:
+npx prettier . --check
 npx prettier . --write

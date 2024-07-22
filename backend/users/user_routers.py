@@ -1,4 +1,4 @@
-# backend/users/routers.py
+# backend/users/user_routers.py
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
@@ -7,13 +7,15 @@ from backend.config import ACCESS_TOKEN_EXPIRE_MINUTES
 from backend.auth.utils import create_access_token
 from backend.dependencies import get_db
 from backend import crud, schemas
+from fastapi.responses import JSONResponse
+
 
 router = APIRouter()
 
 
 @router.post("/users/")
-async def create_user(user: schemas.User, db: Session = Depends(get_db)):
-    db_user = crud.get_user_by_email(db, email=user.email)
+async def post_user(user: schemas.User, db: Session = Depends(get_db)):
+    db_user = crud.retrieve_user_by_email(db, email=user.email)
     if db_user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail="Email already registered"
@@ -23,17 +25,24 @@ async def create_user(user: schemas.User, db: Session = Depends(get_db)):
     access_token = create_access_token(
         data={"sub": new_user.email}, expires_delta=access_token_expires
     )
-    return {
-        "access_token": access_token,
-        "token_type": "bearer",
-        "username": new_user.username,
-        "icon": new_user.icon,
-    }
+    db_user = crud.update_user_token(
+        db=db, user_id=new_user.id, token=access_token
+    )  # Update the db_user with the access token
+
+    response = JSONResponse(
+        content={
+            "access_token": access_token,
+            "token_type": "bearer",
+            "username": new_user.username,
+            "icon": new_user.icon,
+        }
+    )
+    return response
 
 
 @router.get("/users/{user_id}")
 async def get_user(user_id: str, db: Session = Depends(get_db)):
-    db_user = crud.get_user(db, user_id=user_id)
+    db_user = crud.retrieve_user_by_id(db, user_id=user_id)
     if db_user is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
@@ -43,7 +52,7 @@ async def get_user(user_id: str, db: Session = Depends(get_db)):
 
 @router.get("/users/by-email/{email}")
 async def get_user_by_email(email: str, db: Session = Depends(get_db)):
-    db_user = crud.get_user_by_email(db, email=email)
+    db_user = crud.retrieve_user_by_email(db, email=email)
     if db_user is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
