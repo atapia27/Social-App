@@ -4,40 +4,40 @@ from sqlalchemy import (
     Column,
     ForeignKey,
     String,
-)  # Ensure this import is present
+    DateTime,
+)  # Removed Integer, ensure this import is present
 from sqlalchemy.orm import relationship
 from backend.database import Base
-
+import uuid
 
 class User(Base):
     __tablename__ = "User"
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()), index=True)
     email = Column(String, unique=True)
     username = Column(String, unique=True)
     icon = Column(String)
-    token = Column(
-        String, nullable=True
-    )  # Add this line to include the token attribute
-
+    token = Column(String, nullable=True)  # Token attribute added
 
 class Video(Base):
-    __tablename__ = "Video"  # Capital 'V' to match the actual table name
+    __tablename__ = "Video"
+    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()), index=True)
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    user_id = Column(Integer, ForeignKey("User.id"))  # Match the case for "User.id"
-    description = Column(String)
+    created_at = Column(DateTime)
     video_url = Column(String)
+    user_id = Column(String, ForeignKey("User.id"))  # ForeignKey reference updated
+    description = Column(String)
     title = Column(String)
-
-    comments = relationship("Comment", back_populates="video")
-
-
+    num_comments = Column(Integer)  # Integer type added
+    
 class Comment(Base):
-    __tablename__ = "Comment"  # Capital 'C' to match the actual table name
-
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    video_id = Column(Integer, ForeignKey("Video.id"))  # Match the case for "Video.id"
+    __tablename__ = "Comment"
+    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()), index=True)
+    
+    created_at= Column(DateTime)
     content = Column(String)
-    user_id = Column(Integer)
+    user_id = Column(String, ForeignKey("User.id"))  # ForeignKey to User.id added
+    video_id = Column(String, ForeignKey("Video.id"))  # ForeignKey reference updated
 
-    video = relationship("Video", back_populates="comments")
+# commands to run in the terminal
+# alembic revision --autogenerate -m "autogenerate id str"
+# alembic upgrade head

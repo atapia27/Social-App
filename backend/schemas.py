@@ -7,7 +7,6 @@ class User(BaseModel):
     username: str
     icon: str
 
-
 class CreateVideo(BaseModel):
     user_id: str
     description: str
