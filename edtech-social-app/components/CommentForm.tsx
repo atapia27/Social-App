@@ -3,7 +3,7 @@ import { useState } from "react"
 import { useDispatch } from "react-redux"
 import { AppDispatch, RootState, AppThunk } from "../redux/store"
 import { createComment } from "../redux/slices/commentSlice"
-import { CommentSchema } from "../models/schemas"
+import { CommentSchema } from "../schemas/schemas"
 import { FiSend } from "react-icons/fi"
 
 interface Props {

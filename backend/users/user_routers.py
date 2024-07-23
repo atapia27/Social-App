@@ -31,6 +31,7 @@ async def post_user(user: schemas.User, db: Session = Depends(get_db)):
 
     response = JSONResponse(
         content={
+            "id": new_user.id,
             "access_token": access_token,
             "token_type": "bearer",
             "username": new_user.username,

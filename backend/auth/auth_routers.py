@@ -45,6 +45,7 @@ async def login_user(request: schemas.LoginRequest, db: Session = Depends(get_db
 
     response = JSONResponse(
         content={
+            "id": db_user.id,
             "access_token": access_token,
             "token_type": "bearer",
             "username": db_user.username,

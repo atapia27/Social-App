@@ -18,7 +18,6 @@ class EditVideo(BaseModel):
     description: str
     title: str
 
-
 class CreateComment(BaseModel):
     video_id: str
     content: str

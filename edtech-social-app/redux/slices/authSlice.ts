@@ -1,20 +1,22 @@
   // edtech-social-app\redux\slices\authSlice.ts
   import { createSlice, PayloadAction } from "@reduxjs/toolkit"
   import { AppThunk, RootState } from "../store"
+  import { CreateUser } from "../../schemas/schemas"
 
   interface AuthState {
-    token: string | null
-    username: string | null
-    icon: string | null
-    loading: boolean
-    error: string | null
+    user_id: string | null; // Add this line
+    token: string | null;
+    username: string | null;
+    icon: string | null;
+    loading: boolean;
+    error: string | null;
   }
 
   // Utility function to get the initial state from localStorage if available
   const getInitialState = (): AuthState => {
     if (typeof window !== "undefined") {
-      // Check if window is defined
       return {
+        user_id: localStorage.getItem("user_id"), // Retrieve user_id
         token: localStorage.getItem("token"),
         username: localStorage.getItem("username"),
         icon: localStorage.getItem("icon"),
@@ -23,6 +25,7 @@
       }
     } else {
       return {
+        user_id: null, // Default to null
         token: null,
         username: null,
         icon: null,
@@ -44,17 +47,18 @@
       },
       authSuccess(
         state,
-        action: PayloadAction<{ token: string; username: string; icon: string }>,
+        action: PayloadAction<{ user_id: string; token: string; username: string; icon: string }>,
       ) {
-        state.token = action.payload.token
-        state.username = action.payload.username
-        state.icon = action.payload.icon
-        state.loading = false
+        state.user_id = action.payload.user_id; // Add this line
+        state.token = action.payload.token;
+        state.username = action.payload.username;
+        state.icon = action.payload.icon;
+        state.loading = false;
         if (typeof window !== "undefined") {
-          // Check if window is defined
-          localStorage.setItem("token", action.payload.token)
-          localStorage.setItem("username", action.payload.username)
-          localStorage.setItem("icon", action.payload.icon)
+          localStorage.setItem("user_id", action.payload.user_id); // Save user_id
+          localStorage.setItem("token", action.payload.token);
+          localStorage.setItem("username", action.payload.username);
+          localStorage.setItem("icon", action.payload.icon);
         }
       },
       authFailure(state, action: PayloadAction<string>) {
@@ -62,16 +66,17 @@
         state.error = action.payload
       },
       logout(state) {
-        state.token = null
-        state.username = null
-        state.icon = null
+        state.user_id = null; // Add this line
+        state.token = null;
+        state.username = null;
+        state.icon = null;
         if (typeof window !== "undefined") {
-          // Check if window is defined
-          localStorage.removeItem("token")
-          localStorage.removeItem("username")
-          localStorage.removeItem("icon")
+          localStorage.removeItem("user_id"); // Remove user_id
+          localStorage.removeItem("token");
+          localStorage.removeItem("username");
+          localStorage.removeItem("icon");
         }
-      },
+      }
     },
   })
 
@@ -97,7 +102,12 @@
         if (response.ok) {
           const data = await response.json()
           dispatch(
-            authSuccess({ token, username: data.username, icon: data.icon }),
+            authSuccess({ 
+              user_id: data.id, // Assuming your backend response includes user_id
+              token: data.access_token,
+              username: data.username,
+              icon: data.icon,
+             }),
           )
         } else {
           dispatch(logout())
@@ -128,6 +138,7 @@
           const data = await response.json()
           dispatch(
             authSuccess({
+              user_id: data.id, // Assuming your backend response includes user_id
               token: data.access_token,
               username: data.username,
               icon: data.icon,
@@ -159,6 +170,7 @@
           const data = await response.json()
           dispatch(
             authSuccess({
+              user_id: data.id, // Assuming your backend response includes user_id
               token: data.access_token,
               username: data.username,
               icon: data.icon,

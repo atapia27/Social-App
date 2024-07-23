@@ -1,5 +1,18 @@
 // models/schemas.ts
-export interface VideoSchema {
+export interface CreateUser {
+  email: string
+  username: string
+  icon: string
+}
+
+export interface CreateVideo {
+  user_id: string
+  description: string
+  video_url: string
+  title: string
+}
+
+export interface VideoModel {
   video_id: string
   user_id: string
   description: string

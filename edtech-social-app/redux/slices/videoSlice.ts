@@ -1,10 +1,11 @@
 // edtech-social-app\redux\slices\videoSlice.ts
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { AppThunk } from "../store"
-import { VideoSchema, EditVideo } from "../../models/schemas"
+import { VideoModel, EditVideo, CreateVideo } from "../../schemas/schemas"
 
 interface VideoState {
-  videos: VideoSchema[]
+  // video should be VideoModel, but we don't have that type yet
+  videos: VideoModel[]
   loading: boolean
   error: string | null
 }
@@ -23,7 +24,7 @@ const videoSlice = createSlice({
       state.loading = true
       state.error = null
     },
-    fetchVideosSuccess(state, action: PayloadAction<VideoSchema[]>) {
+    fetchVideosSuccess(state, action: PayloadAction<VideoModel[]>) {
       state.videos = action.payload
       state.loading = false
     },
@@ -31,7 +32,7 @@ const videoSlice = createSlice({
       state.loading = false
       state.error = action.payload
     },
-    addVideo(state, action: PayloadAction<VideoSchema>) {
+    addVideo(state, action: PayloadAction<VideoModel>) {
       state.videos.push(action.payload)
     },
     editVideo(state, action: PayloadAction<EditVideo>) {
@@ -62,7 +63,7 @@ export const fetchVideos =
     dispatch(fetchVideosStart())
     try {
       const response = await fetch(`/api/videos?user_id=${user_id}`)
-      const data: VideoSchema[] = await response.json()
+      const data: VideoModel[] = await response.json()
       dispatch(fetchVideosSuccess(data))
     } catch (err: any) {
       dispatch(fetchVideosFailure(err.toString()))
@@ -70,7 +71,7 @@ export const fetchVideos =
   }
 
 export const createVideo =
-  (video: VideoSchema): AppThunk =>
+  (video: CreateVideo): AppThunk =>
   async (dispatch) => {
     try {
       const response = await fetch("/api/videos", {
@@ -80,7 +81,7 @@ export const createVideo =
         },
         body: JSON.stringify(video),
       })
-      const newVideo: VideoSchema = await response.json()
+      const newVideo: VideoModel = await response.json()
       dispatch(addVideo(newVideo))
     } catch (err: any) {
       console.error(err)
