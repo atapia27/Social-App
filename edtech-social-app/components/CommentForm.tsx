@@ -7,10 +7,10 @@ import { CommentSchema } from "../schemas/schemas"
 import { FiSend } from "react-icons/fi"
 
 interface Props {
-  videoId: string // ID of the video for which the comment is being submitted
+  video_id: string // ID of the video for which the comment is being submitted
 }
 
-const CommentForm: React.FC<Props> = ({ videoId }) => {
+const CommentForm: React.FC<Props> = ({ video_id }) => {
   const [content, setContent] = useState("")
   const dispatch = useDispatch<AppDispatch>()
 
@@ -20,7 +20,7 @@ const CommentForm: React.FC<Props> = ({ videoId }) => {
 
     const newComment: CommentSchema = {
       comment_id: "comment123", // You can replace this with the actual comment ID
-      video_id: videoId,
+      video_id: video_id,
       content: content.trim(),
       user_id: "user123", // You can replace this with the actual user ID
     }

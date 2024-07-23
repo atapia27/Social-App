@@ -1,50 +1,50 @@
 // edtech-social-app\redux\slices\videoSlice.ts
-import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { AppThunk } from "../store"
-import { VideoModel, EditVideo, CreateVideo } from "../../schemas/schemas"
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { AppThunk } from "../store";
+import { VideoModel, EditVideo, CreateVideo } from "../../schemas/schemas";
+import { RootState } from "../store";
 
 interface VideoState {
-  // video should be VideoModel, but we don't have that type yet
-  videos: VideoModel[]
-  loading: boolean
-  error: string | null
+  videos: VideoModel[];
+  loading: boolean;
+  error: string | null;
 }
 
 const initialState: VideoState = {
   videos: [],
   loading: false,
   error: null,
-}
+};
 
 const videoSlice = createSlice({
   name: "videos",
   initialState,
   reducers: {
     fetchVideosStart(state) {
-      state.loading = true
-      state.error = null
+      state.loading = true;
+      state.error = null;
     },
     fetchVideosSuccess(state, action: PayloadAction<VideoModel[]>) {
-      state.videos = action.payload
-      state.loading = false
+      state.videos = action.payload;
+      state.loading = false;
     },
     fetchVideosFailure(state, action: PayloadAction<string>) {
-      state.loading = false
-      state.error = action.payload
+      state.loading = false;
+      state.error = action.payload;
     },
     addVideo(state, action: PayloadAction<VideoModel>) {
-      state.videos.push(action.payload)
+      state.videos.push(action.payload);
     },
     editVideo(state, action: PayloadAction<EditVideo>) {
-      const { video_id, title, description } = action.payload
-      const video = state.videos.find((v) => v.video_id === video_id)
+      const { video_id, title, description } = action.payload;
+      const video = state.videos.find((v) => v.video_id === video_id);
       if (video) {
-        video.title = title
-        video.description = description
+        video.title = title;
+        video.description = description;
       }
     },
   },
-})
+});
 
 export const {
   fetchVideosStart,
@@ -52,9 +52,15 @@ export const {
   fetchVideosFailure,
   addVideo,
   editVideo,
-} = videoSlice.actions
+} = videoSlice.actions;
 
-export default videoSlice.reducer
+export default videoSlice.reducer;
+
+// Corrected selectors
+export const selectVideos = (state: RootState) => state.videos.videos;
+export const selectLoading = (state: RootState) => state.videos.loading;
+export const selectError = (state: RootState) => state.videos.error;
+
 
 // fetches videos from a specific user
 export const fetchVideos =
