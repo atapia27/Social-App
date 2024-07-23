@@ -4,6 +4,7 @@ import { FiThumbsUp, FiMessageSquare, FiShare } from "react-icons/fi"
 import CommentForm from "./CommentForm"
 
 interface VideoPostProps {
+  // user_id: string to relate the video to the user
   video_id: string
   description: string
   video_url: string
