@@ -1,14 +1,14 @@
-//edtech-social-app\components\VideoPost.tsx
-import React, { useState } from "react"
-import { FiThumbsUp, FiMessageSquare, FiShare } from "react-icons/fi"
-import CommentForm from "./CommentForm"
+// edtech-social-app\components\VideoPost.tsx
+import React, { useState } from "react";
+import ReactPlayer from "react-player";
+import { FiThumbsUp, FiMessageSquare, FiShare } from "react-icons/fi";
+import CommentForm from "./CommentForm";
 
 interface VideoPostProps {
-  // user_id: string to relate the video to the user
-  video_id: string
-  description: string
-  video_url: string
-  title: string
+  video_id: string;
+  description: string;
+  video_url: string;
+  title: string;
 }
 
 const VideoPost: React.FC<VideoPostProps> = ({
@@ -17,22 +17,44 @@ const VideoPost: React.FC<VideoPostProps> = ({
   video_url,
   title,
 }) => {
-  const [showCommentForm, setShowCommentForm] = useState(false)
+  const [showCommentForm, setShowCommentForm] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [valid, setValid] = useState(true);
 
   const toggleCommentForm = () => {
-    setShowCommentForm(!showCommentForm)
-  }
+    setShowCommentForm(!showCommentForm);
+  };
+
+  // When URL is invalid, VideoPost component will not render
+  const handleError = () => {
+    setLoading(false);
+    setValid(false);
+  };
+
+  // When video is ready, loading state will be set to false
+  const handleReady = () => {
+    setLoading(false);
+  };
+
+  if (!valid) return null;
 
   return (
     <div className="mx-auto mb-8 w-[55%] rounded-lg bg-white shadow-md">
       <div className="relative">
-        <iframe
+        {loading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-gray-200">
+            Loading...
+          </div>
+        )}
+        <ReactPlayer
+          url={video_url}
           className="w-full rounded-t-lg"
-          height="315"
-          src={video_url}
-          title={title}
-          allowFullScreen
-        ></iframe>
+          width="100%"
+          height="315px"
+          controls
+          onReady={handleReady}
+          onError={handleError}
+        />
       </div>
       <div className="p-4">
         <h2 className="text-lg font-semibold">{title}</h2>
@@ -57,7 +79,7 @@ const VideoPost: React.FC<VideoPostProps> = ({
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default VideoPost
+export default VideoPost;

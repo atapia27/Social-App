@@ -2,7 +2,6 @@
 import React, { useState } from "react"
 import { FiCornerDownRight } from "react-icons/fi"
 import { useDispatch, useSelector } from "react-redux";
-import { createVideo } from "../redux/slices/videoSlice"; // Adjust the import path as necessary
 import { AppDispatch } from "../redux/store"
 import {authSuccess} from "../redux/slices/authSlice"; // Adjust the import path as necessary
 
@@ -17,7 +16,6 @@ const CreateVideoForm: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const videoData = { user_id: user_id.payload.user_id, description: description, video_url: videoUrl, title: title };
-    dispatch(createVideo(videoData));
     setTitle("");
     setDescription("");
     setVideoUrl("");

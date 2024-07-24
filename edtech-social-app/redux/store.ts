@@ -1,6 +1,6 @@
 // edtech-social-app\redux\store.ts
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit"
-import videoReducer from "./slices/videoSlice"
+import videoReducer from "./videos/videoSlice"
 import commentReducer from "./slices/commentSlice"
 import authReducer from "./slices/authSlice" // Import the authReducer
 
