@@ -3,7 +3,7 @@
 import React, { useState } from "react"
 import { useDispatch } from "react-redux"
 import { useRouter } from "next/router"
-import { loginUser } from "../redux/slices/authSlice"
+import { loginUser } from "../redux/auth/authSlice"
 import { AppDispatch } from "../redux/store"
 
 const Login = () => {
