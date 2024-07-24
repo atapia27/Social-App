@@ -3,12 +3,12 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk, RootState } from "../store";
 
 interface VideoState {
-  videos: SingleVideoAPIResponseFormat[]
+  videos: GetVideosResponse[]
   loading: boolean
   error: string | null
 }
 
-interface SingleVideoAPIResponseFormat {
+interface GetVideosResponse {
   created_at: string
   video_url: string
   user_id: string
@@ -18,20 +18,17 @@ interface SingleVideoAPIResponseFormat {
   id: string
 }
 
+interface PostVideo{
+  user_id: string
+  description: string
+  video_url: string
+  title: string
+}
+
 const initialState: VideoState = {
   videos: [],
   loading: false,
   error: null,
-}
-
-// Function to check if a video URL is valid
-const isValidVideoUrl = async (url: string) => {
-  try {
-    const response = await fetch(url);
-    return response.ok;
-  } catch {
-    return false;
-  }
 }
 
 const videoSlice = createSlice({
@@ -42,7 +39,7 @@ const videoSlice = createSlice({
       state.loading = true
       state.error = null
     },
-    videoSuccess(state, action: PayloadAction<SingleVideoAPIResponseFormat[]>) {
+    videoSuccess(state, action: PayloadAction<GetVideosResponse[]>) {
       state.videos = action.payload
       state.loading = false
     },
@@ -58,7 +55,7 @@ const videoSlice = createSlice({
   },
 })
 
-// Action creators: these are used to dispatch actions to the store
+// Reducers: these are used to update the state
 export const { videoStart, videoSuccess, videoFailure, resetVideos } = videoSlice.actions
 
 // Selectors: these are used to get the state from the store
@@ -68,6 +65,7 @@ export const selectLoading = (state: RootState) => state.videos.loading
 export const selectError = (state: RootState) => state.videos.error
 
 // Thunks: this is where we interact with the backend
+// This function fetches all videos for a specific user_id
 export const fetchUserVideos = (user_id: string): AppThunk => async dispatch => {
   dispatch(videoStart())
   try {
@@ -79,14 +77,14 @@ export const fetchUserVideos = (user_id: string): AppThunk => async dispatch => 
     })
     if (response.ok) {
       const data = await response.json()
-      const videos = data.videos.map((video: SingleVideoAPIResponseFormat) => ({
+      const videos = data.videos.map((video: GetVideosResponse) => ({
         created_at: video.created_at,
         video_url: video.video_url,
         user_id: video.user_id,
         description: video.description,
         title: video.title,
         num_comments: video.num_comments,
-        id: video.id,
+        id: user_id,
       }))
       dispatch(videoSuccess(videos))
     } else {
@@ -95,8 +93,42 @@ export const fetchUserVideos = (user_id: string): AppThunk => async dispatch => 
     }
   } catch (error) {
     dispatch(videoFailure("An error occurred"))
+  } 
+}
+
+// This function adds a video
+// check if PostVideo is the correct type, or if individual fields should be passed
+export const addVideo = (video: PostVideo): AppThunk => async dispatch => {
+  dispatch(videoStart())
+  try {
+    const response = await fetch("https://take-home-assessment-423502.uc.r.appspot.com/api/videos/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(video),
+    })
+    if (response.ok) {
+      const data = await response.json()
+      const newVideo: GetVideosResponse = {
+        created_at: data.created_at,
+        video_url: data.video_url,
+        user_id: data.user_id,
+        description: data.description,
+        title: data.title,
+        num_comments: data.num_comments,
+        id: data.id,
+      }
+      dispatch(videoSuccess([newVideo]))
+    } else {
+      const error = await response.json()
+      dispatch(videoFailure(error.message))
+    }
+  } catch (error) {
+    dispatch(videoFailure("An error occurred"))
   }
 }
+
 
 export default videoSlice.reducer
 
