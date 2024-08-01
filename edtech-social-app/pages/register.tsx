@@ -15,6 +15,8 @@ import Image from "next/image"
 const Register = () => {
   const [email, setEmail] = useState("")
   const [username, setUsername] = useState("")
+  const [first_name, setFirst_name] = useState("")
+  const [last_name, setLast_name] = useState("")
   const [icon, setIcon] = useState("")
   const dispatch = useDispatch<AppDispatch>()
   const router = useRouter()
@@ -39,9 +41,9 @@ const Register = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    await dispatch(registerUser(email, username, icon))
+    await dispatch(registerUser(email, first_name, last_name, username, icon))
   }
-
+  
   useEffect(() => {
     if (!authLoading && authToken) {
       router.push("/") // Redirect to home page upon successful registration and login
@@ -69,16 +71,32 @@ const Register = () => {
         </div>
         <div>
           <label
-            htmlFor="username"
+            htmlFor="first_name"
             className="block text-sm font-medium text-gray-700"
           >
-            Username:
+            First Name:
           </label>
           <input
             type="text"
-            id="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            id="first_name"
+            value={first_name}
+            onChange={(e) => setFirst_name(e.target.value)}
+            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+            required
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="last_name"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Last Name:
+          </label>
+          <input
+            type="text"
+            id="last_name"
+            value={last_name}
+            onChange={(e) => setLast_name(e.target.value)}
             className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
             required
           />
@@ -108,6 +126,7 @@ const Register = () => {
         <button
           type="submit"
           className="flex w-full justify-center rounded-md border border-transparent bg-blue-500 px-4 py-2 text-sm font-medium text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          // move handleSubmit here to avoid the need for e.preventDefault()
         >
           Register
         </button>

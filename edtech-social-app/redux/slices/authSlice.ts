@@ -6,6 +6,8 @@
   interface AuthState {
     user_id: string | null; // Add this line
     token: string | null;
+    first_name: string | null;
+    last_name: string | null;
     username: string | null;
     icon: string | null;
     loading: boolean;
@@ -18,6 +20,8 @@
       return {
         user_id: localStorage.getItem("user_id"), // Retrieve user_id
         token: localStorage.getItem("token"),
+        first_name: localStorage.getItem("first_name"),
+        last_name: localStorage.getItem("last_name"),
         username: localStorage.getItem("username"),
         icon: localStorage.getItem("icon"),
         loading: false,
@@ -27,6 +31,8 @@
       return {
         user_id: null, // Default to null
         token: null,
+        first_name: null,
+        last_name: null,
         username: null,
         icon: null,
         loading: false,
@@ -47,7 +53,7 @@
       },
       authSuccess(
         state,
-        action: PayloadAction<{ user_id: string; token: string; username: string; icon: string }>,
+        action: PayloadAction<{ user_id: string; token: string; first_name: string; last_name: string; username: string; icon: string; }>,
       ) {
         state.user_id = action.payload.user_id; // Add this line
         state.token = action.payload.token;
@@ -57,6 +63,8 @@
         if (typeof window !== "undefined") {
           localStorage.setItem("user_id", action.payload.user_id); // Save user_id
           localStorage.setItem("token", action.payload.token);
+          localStorage.setItem("first_name", action.payload.first_name);
+          localStorage.setItem("last_name", action.payload.last_name);
           localStorage.setItem("username", action.payload.username);
           localStorage.setItem("icon", action.payload.icon);
         }
@@ -73,6 +81,8 @@
         if (typeof window !== "undefined") {
           localStorage.removeItem("user_id"); // Remove user_id
           localStorage.removeItem("token");
+          localStorage.removeItem("first_name");
+          localStorage.removeItem("last_name");
           localStorage.removeItem("username");
           localStorage.removeItem("icon");
         }
@@ -88,6 +98,7 @@
   export const selectAuthLoading = (state: RootState) => state.auth.loading
   export const selectAuthError = (state: RootState) => state.auth.error
 
+  // not yet defined
   export const checkAuthToken = (): AppThunk => async (dispatch) => {
     const token = localStorage.getItem("token")
     if (token) {
@@ -105,6 +116,8 @@
             authSuccess({ 
               user_id: data.id, // Assuming your backend response includes user_id
               token: data.access_token,
+              first_name: data.first_name,
+              last_name: data.last_name,
               username: data.username,
               icon: data.icon,
              }),
@@ -122,16 +135,16 @@
 
   // Thunks for handling async logic (e.g., login, register, logout)
   export const registerUser =
-    (email: string, username: string, icon: string): AppThunk =>
+    (email: string, first_name: string, last_name:string, username: string, icon: string): AppThunk =>
     async (dispatch) => {
       dispatch(authStart())
       try {
-        const response = await fetch("http://localhost:8000/users/users/", {
+        const response = await fetch("http://localhost:8000/auth/register", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ email, username, icon }),
+          body: JSON.stringify({ email, first_name, last_name, username, icon }),
         })
 
         if (response.ok) {
@@ -140,6 +153,8 @@
             authSuccess({
               user_id: data.id, // Assuming your backend response includes user_id
               token: data.access_token,
+              first_name: data.first_name,
+              last_name: data.last_name,
               username: data.username,
               icon: data.icon,
             }),
@@ -172,6 +187,8 @@
             authSuccess({
               user_id: data.id, // Assuming your backend response includes user_id
               token: data.access_token,
+              first_name: data.first_name,
+              last_name: data.last_name,
               username: data.username,
               icon: data.icon,
             }),

@@ -9,12 +9,15 @@ from sqlalchemy import (
 from sqlalchemy.orm import relationship
 from backend.database import Base
 import uuid
+from sqlalchemy.ext.hybrid import hybrid_property
 
 class User(Base):
     __tablename__ = "User"
     id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()), index=True)
     email = Column(String, unique=True)
-    username = Column(String, unique=True)
+    first_name = Column(String)
+    last_name = Column(String)
+    username = Column(String)
     icon = Column(String)
     token = Column(String, nullable=True)  # Token attribute added
 
