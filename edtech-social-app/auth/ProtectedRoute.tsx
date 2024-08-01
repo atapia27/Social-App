@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useRouter } from "next/router"
-import { selectAuthToken, checkAuthToken } from "../redux/slices/authSlice"
+import { selectAuthToken, checkAuthToken } from "../redux/auth/authSlice"
 import { AppDispatch } from "../redux/store"
 
 interface ProtectedRouteProps {

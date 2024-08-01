@@ -8,7 +8,7 @@ import {
   selectAuthToken,
   selectAuthError,
   selectAuthLoading,
-} from "../redux/slices/authSlice"
+} from "../redux/auth/authSlice"
 import { AppDispatch, RootState } from "../redux/store"
 import Image from "next/image"
 

@@ -14,7 +14,7 @@ import {
   selectAuthToken,
   selectAuthUsername,
   selectAuthIcon,
-} from "../redux/slices/authSlice"
+} from "../redux/auth/authSlice"
 import { AppDispatch } from "../redux/store"
 import Image from "next/image"
 
