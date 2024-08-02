@@ -2,6 +2,7 @@
 import VideoPost from "./VideoPost"
 import { useSelector, useDispatch } from 'react-redux';
 import { selectError, selectLoading, selectUserVideos, fetchUserVideos, resetVideos  } from '../redux/videos/videoSlice';
+import {selectAuthUsername} from '../redux/auth/authSlice';
 import { AppDispatch } from '../redux/store';
 import { useEffect } from "react";
 
@@ -10,6 +11,7 @@ const VideoFeed: React.FC = () => {
   const videos = useSelector(selectUserVideos)
   const loading = useSelector(selectLoading)
   const error = useSelector(selectError)
+  const username = useSelector(selectAuthUsername) || '';
   const dispatch = useDispatch<AppDispatch>()
 
 
@@ -20,8 +22,8 @@ const VideoFeed: React.FC = () => {
     dispatch(resetVideos())
 
     // Fetch videos for user
-    dispatch(fetchUserVideos("1"));
-  }, [dispatch])
+    dispatch(fetchUserVideos(username));
+  }, [dispatch, username])
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
