@@ -20,7 +20,7 @@ const VideoFeed: React.FC = () => {
     dispatch(resetVideos())
 
     // Fetch videos for user
-    dispatch(fetchUserVideos("john_smith"));
+    dispatch(fetchUserVideos("1"));
   }, [dispatch])
 
   if (loading) return <div>Loading...</div>;

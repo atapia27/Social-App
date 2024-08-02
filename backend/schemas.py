@@ -33,5 +33,4 @@ class TokenData(BaseModel):
 
 # New addition
 class LoginRequest(BaseModel):
-    email: str
-
+    username: str
