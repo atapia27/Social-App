@@ -5,20 +5,14 @@ interface CommentsDisplayProps {
   video_id: string;
 }
 
-const CommentsDisplay: React.FC<CommentsDisplayProps> = ({ video_id }) => {
-  const { comments, loading, error, fetchComments } = useCommentStore();
-
-  useEffect(() => {
-    if (video_id) {
-      console.log(`Fetching comments for video_id: ${video_id}`);
-    }
-  }, [video_id, fetchComments]);
+const CommentsDisplay: React.FC<CommentsDisplayProps> = () => {
+  const { comments, loading, error } = useCommentStore();
 
   if (loading) return <div>Loading comments...</div>;
   if (error) return <div>Error loading comments: {error}</div>;
 
   return (
-    <div className="comments-display">
+    <div className="comments-display border-t border-gray-200 pt-2 mt-2">
       {comments.map((comment) => (
         <div key={comment.id} className="comment mb-4">
           <p className="text-sm">{comment.content}</p>

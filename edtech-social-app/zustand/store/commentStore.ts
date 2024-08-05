@@ -24,7 +24,6 @@ const useCommentStore = create<CommentState & CommentActions>()(
         set({ loading: true, error: null })
         try {
           const data: CommentsResponse = await fetchCommentsAPI(video_id)
-          console.log(`Comments fetched: ${JSON.stringify(data.comments)}`)
           set({ comments: data.comments, loading: false, error: null })
         } catch (error: any) {
           console.error(`Error fetching comments: ${error.message}`)
