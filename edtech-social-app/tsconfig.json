@@ -27,6 +27,6 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "components/Tailwind/Link.jsx"
-  ],
+, "redux/videos/utils/validateVideoUrl.js", "redux/videos/utils/validateVideoUrl.js"  ],
   "exclude": ["node_modules"]
 }

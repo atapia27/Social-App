@@ -1,26 +1,16 @@
-// edtech-social-app\pages\register.tsx
+// edtech-social-app/pages/register.tsx
 
 import React, { useState, useEffect } from "react"
-import { useDispatch, useSelector } from "react-redux"
 import { useRouter } from "next/router"
-import {
-  registerUser,
-  selectAuthToken,
-  selectAuthError,
-  selectAuthLoading,
-} from "../redux/slices/authSlice"
-import { AppDispatch, RootState } from "../redux/store"
+import useAuthStore from "../zustand/store/authStore"
 import Image from "next/image"
 
 const Register = () => {
-  const [email, setEmail] = useState("")
-  const [username, setUsername] = useState("")
+  const [first_name, setFirstName] = useState("")
+  const [last_name, setLastName] = useState("")
   const [icon, setIcon] = useState("")
-  const dispatch = useDispatch<AppDispatch>()
+  const { register, loggedIn } = useAuthStore()
   const router = useRouter()
-  const authLoading = useSelector(selectAuthLoading)
-  const authError = useSelector(selectAuthError)
-  const authToken = useSelector(selectAuthToken)
 
   const icons = [
     { name: "Bear", image: "/Icons/Bear.png" },
@@ -39,46 +29,46 @@ const Register = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    await dispatch(registerUser(email, username, icon))
+    await register(first_name, last_name, icon)
   }
 
   useEffect(() => {
-    if (!authLoading && authToken) {
+    if (loggedIn) {
       router.push("/") // Redirect to home page upon successful registration and login
     }
-  }, [authLoading, authToken, router])
+  }, [loggedIn, router])
 
   return (
     <div className="flex flex-col items-center justify-center p-4">
       <form onSubmit={handleSubmit} className="w-full max-w-lg space-y-4">
         <div>
           <label
-            htmlFor="email"
+            htmlFor="first_name"
             className="block text-sm font-medium text-gray-700"
           >
-            Email:
+            First Name:
           </label>
           <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            type="text"
+            id="first_name"
+            value={first_name}
+            onChange={(e) => setFirstName(e.target.value)}
             className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
             required
           />
         </div>
         <div>
           <label
-            htmlFor="username"
+            htmlFor="last_name"
             className="block text-sm font-medium text-gray-700"
           >
-            Username:
+            Last Name:
           </label>
           <input
             type="text"
-            id="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            id="last_name"
+            value={last_name}
+            onChange={(e) => setLastName(e.target.value)}
             className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
             required
           />
@@ -87,7 +77,10 @@ const Register = () => {
           {icons.map((iconOption) => (
             <button
               key={iconOption.name}
-              className={`border-2 p-2 ${icon === iconOption.name ? "border-blue-500" : "border-gray-200"} transform cursor-pointer rounded-lg transition duration-200 hover:border-gray-400`}
+              type="button"
+              className={`border-2 p-2 ${
+                icon === iconOption.name ? "border-blue-500" : "border-gray-200"
+              } transform cursor-pointer rounded-lg transition duration-200 hover:border-gray-400`}
               onClick={() => setIcon(iconOption.name)}
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") {

@@ -43,6 +43,34 @@ reset_test_database()
 # Initialize the TestClient with our FastAPI app for making test requests
 client = TestClient(app)
 
+def test_post_user():
+    # Define a new user's data
+    new_user_data = {
+        "email": "newuser@example.com",
+        "username": "newuser",
+        "icon": "icon_path"
+    }
+    
+    # Send a POST request to create a new user
+    response = client.post("/users/users/", json=new_user_data)
+    
+    # Assert that the response status code is 200
+    assert response.status_code == 200
+    
+    # Parse the response JSON
+    response_data = response.json()
+    
+    # Assert that the response contains the expected fields
+    assert "access_token" in response_data
+    assert "token_type" in response_data
+    assert response_data["token_type"] == "bearer"
+    assert "username" in response_data
+    assert response_data["username"] == "newuser"
+    assert "icon" in response_data
+    assert "id" in response_data
+    assert response_data["icon"] == "icon_path"
+    print(response_data)
+
 
 # Helper function to create a user with unique data for testing
 def register_user(email, username, icon):

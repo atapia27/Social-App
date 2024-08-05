@@ -1,3 +1,5 @@
+// edtech-social-app/auth/utils/isProtectedRoute.ts
+
 export const protectedRoutes = ["/", "/friends", "/notifications", "/chat"]
 
 export const isProtectedRoute = (path: string): boolean => {

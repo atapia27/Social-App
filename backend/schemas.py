@@ -1,31 +1,34 @@
-# backend\schemas.py
+# backend/schemas.py
+
 from pydantic import BaseModel
 
-
 class User(BaseModel):
-    email: str
-    username: str
+    id: str
+    first_name: str
+    last_name: str
+    icon: str
+    logged_in: bool
+
+class CreateUser(BaseModel):
+    first_name: str
+    last_name: str
     icon: str
 
-
-class Video(BaseModel):
-    user_id: int
+class CreateVideo(BaseModel):
+    user_id: str
     description: str
     video_url: str
     title: str
+    
+class EditVideo(BaseModel):
+    video_id: str
+    description: str
+    title: str
 
-
-class Comment(BaseModel):
-    video_id: int
+class CreateComment(BaseModel):
+    video_id: str
     content: str
     user_id: str
 
-
-# New addition
-class TokenData(BaseModel):
-    email: str
-
-
-# New addition
 class LoginRequest(BaseModel):
-    email: str
+    user_id: str

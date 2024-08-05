@@ -1,22 +1,26 @@
-//edtech-social-app\components\CreateVideoForm.tsx
+// edtech-social-app/components/video/CreateVideoForm.tsx
+
 import React, { useState } from "react"
 import { FiCornerDownRight } from "react-icons/fi"
+import useAuthStore from  "../../zustand/store/authStore"
+import useVideoStore from "../../zustand/store/videoStore"
 
-interface CreateVideoFormProps {
-  onCreate: (title: string, description: string, videoUrl: string) => void
-}
-
-const CreateVideoForm: React.FC<CreateVideoFormProps> = ({ onCreate }) => {
+const CreateVideoForm: React.FC = () => {
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
   const [videoUrl, setVideoUrl] = useState("")
+  const { user_id } = useAuthStore()
+  const { addVideo } = useVideoStore()
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    onCreate(title, description, videoUrl)
-    setTitle("")
-    setDescription("")
-    setVideoUrl("")
+    if (user_id) {
+      const videoData = { user_id, description, video_url: videoUrl, title }
+      addVideo(videoData)
+      setTitle("")
+      setDescription("")
+      setVideoUrl("")
+    }
   }
 
   return (
