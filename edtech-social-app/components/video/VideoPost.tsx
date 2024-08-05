@@ -3,13 +3,15 @@
 import React, { useState } from "react"
 import ReactPlayer from "react-player"
 import { FiThumbsUp, FiMessageSquare, FiShare } from "react-icons/fi"
-import CommentForm from "../CommentForm"
+import CommentForm from "../comment/CommentForm"
+import useCommentStore from "../../zustand/store/commentStore"
 
 interface VideoPostProps {
   video_id: string
   description: string
   video_url: string
   title: string
+  num_comments: number
 }
 
 const VideoPost: React.FC<VideoPostProps> = ({
@@ -17,13 +19,19 @@ const VideoPost: React.FC<VideoPostProps> = ({
   description,
   video_url,
   title,
+  num_comments,
 }) => {
   const [showCommentForm, setShowCommentForm] = useState(false)
   const [loading, setLoading] = useState(true)
   const [valid, setValid] = useState(true)
+  const { fetchComments } = useCommentStore()
 
   const toggleCommentForm = () => {
-    setShowCommentForm(!showCommentForm)
+    setShowCommentForm((prev) => !prev)
+    if (!showCommentForm) {
+      console.log(`Fetching comments for video_id: ${video_id}`)
+      fetchComments(video_id)
+    }
   }
 
   // When URL is invalid, VideoPost component will not render
@@ -38,6 +46,7 @@ const VideoPost: React.FC<VideoPostProps> = ({
   }
 
   if (!valid) return null
+
 
   return (
     <div className="mx-auto mb-8 w-[55%] rounded-lg bg-white shadow-md">
@@ -71,7 +80,7 @@ const VideoPost: React.FC<VideoPostProps> = ({
             onClick={toggleCommentForm}
           >
             <FiMessageSquare className="mr-1" />
-            Comment
+            Comments ({num_comments})
           </button>
           <button className="ml-4 flex items-center text-gray-500 hover:text-gray-700">
             <FiShare className="mr-1" />

@@ -12,13 +12,13 @@ const VideoFeed: React.FC = () => {
     error: state.error,
     fetchVideos: state.fetchVideos,
   }))
-  const { user_id } = useAuthStore()
-
+  // const { user_id } = useAuthStore((state) => state) // Fetch the user ID from auth store
+  const dislpay_videos_from_user = "1" // Hardcoded user_id for testing
   useEffect(() => {
-    if (user_id) {
-      fetchVideos(user_id)
+    if (dislpay_videos_from_user) {
+      fetchVideos(dislpay_videos_from_user)
     }
-  }, [fetchVideos, user_id])
+  }, [fetchVideos, dislpay_videos_from_user])
 
   if (loading) return <div>Loading...</div>
   if (error) return <div>Error: {error}</div>
@@ -39,6 +39,7 @@ const VideoFeed: React.FC = () => {
                 title={video.title}
                 description={video.description}
                 video_url={video.video_url}
+                num_comments={video.num_comments}
               />
             )
           }
