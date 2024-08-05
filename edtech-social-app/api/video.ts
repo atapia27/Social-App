@@ -23,7 +23,7 @@ export interface GetVideosResponse {
       const data = await response.json();
       return data.videos.map((video: GetVideosResponse) => ({
         ...video,
-        id: user_id,
+        id: video.id, // Use video.id instead of user_id
       }));
     } else {
       const error = await response.json();
