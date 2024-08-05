@@ -2,8 +2,8 @@
 import React, { useState } from "react"
 import { FiCornerDownRight } from "react-icons/fi"
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch } from "../redux/store"
-import {authSuccess} from "../redux/auth/authSlice"; // Adjust the import path as necessary
+import { AppDispatch } from "../../redux/store"
+import {authSuccess} from "../../redux/auth/authSlice"; // Adjust the import path as necessary
 
 const CreateVideoForm: React.FC = () => {
   const [title, setTitle] = useState("");

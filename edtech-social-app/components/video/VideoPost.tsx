@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import ReactPlayer from "react-player";
 import { FiThumbsUp, FiMessageSquare, FiShare } from "react-icons/fi";
-import CommentForm from "./CommentForm";
+import CommentForm from "../CommentForm";
 
 interface VideoPostProps {
   video_id: string;

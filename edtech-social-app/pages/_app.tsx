@@ -6,7 +6,7 @@ import { store } from "../redux/store"
 import "../styles/globals.css"
 import Layout from "../components/layout"
 import ProtectedRoute from "../auth/ProtectedRoute"
-import { isProtectedRoute } from "../utils/protectedRoutes"
+import { isProtectedRoute } from "../auth/utils/isProtectedRoute"
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter()

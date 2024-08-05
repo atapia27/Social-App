@@ -1,4 +1,4 @@
-// edtech-social-app/redux/slices/authSlice.ts
+// edtech-social-app\redux\auth\authSlice.ts
 
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { AppThunk, RootState } from "../store"
@@ -12,7 +12,7 @@ interface AuthState {
   username: string | null
   icon: string | null
   loading: boolean
-  error: string | null
+  error: string | null  
 }
 
 // Utility function to get the initial state from localStorage if available
