@@ -47,7 +47,6 @@ const VideoPost: React.FC<VideoPostProps> = ({
 
   if (!valid) return null
 
-
   return (
     <div className="mx-auto mb-8 w-[55%] rounded-lg bg-white shadow-md">
       <div className="relative">

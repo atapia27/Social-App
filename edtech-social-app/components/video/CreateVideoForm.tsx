@@ -2,7 +2,7 @@
 
 import React, { useState } from "react"
 import { FiCornerDownRight } from "react-icons/fi"
-import useAuthStore from  "../../zustand/store/authStore"
+import useAuthStore from "../../zustand/store/authStore"
 import useVideoStore from "../../zustand/store/videoStore"
 
 const CreateVideoForm: React.FC = () => {

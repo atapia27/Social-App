@@ -1,5 +1,5 @@
-import type { Config } from "tailwindcss";
-const defaultTheme = require("tailwindcss/defaultTheme");
+import type { Config } from "tailwindcss"
+const defaultTheme = require("tailwindcss/defaultTheme")
 
 const config: Config = {
   content: [
@@ -13,8 +13,8 @@ const config: Config = {
         /* 
         set the default font to Poppins
         */
-        'sans': ['"Poppins"', ...defaultTheme.fontFamily.sans],
-        'roboto': ['"Roboto"'],
+        sans: ['"Poppins"', ...defaultTheme.fontFamily.sans],
+        roboto: ['"Roboto"'],
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
@@ -36,5 +36,5 @@ const config: Config = {
     },
   },
   plugins: [],
-};
-export default config;
+}
+export default config

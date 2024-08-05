@@ -2,6 +2,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from backend.auth.auth_routers import router as auth_router
+
 # dont need user router
 # from backend.users.user_routers import router as user_router
 

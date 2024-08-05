@@ -2,14 +2,13 @@
 
 import pytest
 from httpx import AsyncClient
-from backend.videos import video_routers 
+from backend.videos import video_routers
 from backend import schemas
+
 # No need to import TestClient for async tests
 # from fastapi.testclient import TestClient
 
 # Your imports remain the same...
-
-
 
 
 # @pytest.mark.asyncio
@@ -20,12 +19,13 @@ from backend import schemas
 #     assert response["success"] is True
 #     assert "data" in response
 
+
 @pytest.mark.asyncio
 async def test_get_video_data():
     user_id = "john_smith"
     response = await video_routers.get_videos_data(user_id)
     assert response is not None
-    #print formatted data
+    # print formatted data
     for video in response["videos"][:5]:
         print(f"Title: {video['title']}")
         print(f"Description: {video['description']}")
@@ -35,7 +35,8 @@ async def test_get_video_data():
         print(f"Video ID: {video['id']}")
         print(f"User ID: {video['user_id']}")
         print("\n")
-        
+
+
 # @pytest.mark.asyncio
 # async def test_put_video_data():
 #     video = schemas.EditVideo(video_id="jt8mwFIauwdRANprIhoQ", description="This is an updated test video", title="Updated Test Video")
@@ -59,7 +60,7 @@ async def test_get_video_data():
 #         print(f"Video ID: {video['id']}")
 #         print(f"User ID: {video['user_id']}")
 #         print("\n")
-        
+
 # @pytest.mark.asyncio
 # async def test_get_single_video_data():
 #     video_id = "ikJNJRXEiTfzrluR4ewx"

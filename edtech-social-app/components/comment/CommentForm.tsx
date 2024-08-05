@@ -1,38 +1,42 @@
-import React, { useState } from "react";
-import useCommentStore from "../../zustand/store/commentStore";
-import { FiSend } from "react-icons/fi";
-import CommentsDisplay from "./CommentsDisplay";
-import useAuthStore from "../../zustand/store/authStore";
+import React, { useState } from "react"
+import useCommentStore from "../../zustand/store/commentStore"
+import { FiSend } from "react-icons/fi"
+import CommentsDisplay from "./CommentsDisplay"
+import useAuthStore from "../../zustand/store/authStore"
 
 interface Props {
-  video_id: string; // ID of the video for which the comment is being submitted
+  video_id: string // ID of the video for which the comment is being submitted
 }
 
 const CommentForm: React.FC<Props> = ({ video_id }) => {
-  const [content, setContent] = useState("");
-  const { postComment } = useCommentStore();
-  const { user_id } = useAuthStore((state) => state); // Get user_id from auth store
+  const [content, setContent] = useState("")
+  const { postComment } = useCommentStore()
+  const { user_id } = useAuthStore((state) => state) // Get user_id from auth store
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!content.trim()) return; // Do not submit empty comments
+    e.preventDefault()
+    if (!content.trim()) return // Do not submit empty comments
 
     try {
       // Dispatch an action to create the comment
-      await postComment(video_id, content.trim(), user_id!); // Correct user_id usage
-      console.log(`Comment posted successfully for video_id: ${video_id}`);
+      await postComment(video_id, content.trim(), user_id!) // Correct user_id usage
+      console.log(`Comment posted successfully for video_id: ${video_id}`)
       // Clear the input field after submission
-      setContent("");
+      setContent("")
     } catch (error) {
-      console.error("Error creating comment:", error);
+      console.error("Error creating comment:", error)
       // Handle error (e.g., show error message to user)
     }
-  };
+  }
 
   return (
     <div className="comment-section">
-      {video_id && <CommentsDisplay video_id={video_id} />} {/* Include CommentsDisplay above the form */}
-      <form onSubmit={handleSubmit} className="mx-4 mt-4 flex items-center gap-2">
+      {video_id && <CommentsDisplay video_id={video_id} />}{" "}
+      {/* Include CommentsDisplay above the form */}
+      <form
+        onSubmit={handleSubmit}
+        className="mx-4 mt-4 flex items-center gap-2"
+      >
         <textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
@@ -47,7 +51,7 @@ const CommentForm: React.FC<Props> = ({ video_id }) => {
         </button>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default CommentForm;
+export default CommentForm

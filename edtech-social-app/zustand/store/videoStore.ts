@@ -46,4 +46,4 @@ const useVideoStore = create<VideoState & VideoActions>()((set) => ({
   },
 }))
 
-export default useVideoStore;
+export default useVideoStore

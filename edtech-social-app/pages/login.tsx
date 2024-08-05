@@ -13,7 +13,7 @@ const Login = () => {
     e.preventDefault()
     try {
       await login(user_id)
-      router.push("/") 
+      router.push("/")
     } catch (error) {
       console.error("Login failed", error)
     }

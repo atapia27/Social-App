@@ -1,22 +1,27 @@
 // edtech-social-app/zustand/store/authStore.ts
 
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import { registerUserAPI, loginUserAPI, logoutUserAPI, AuthResponse } from '../../api/auth';
+import { create } from "zustand"
+import { persist } from "zustand/middleware"
+import {
+  registerUserAPI,
+  loginUserAPI,
+  logoutUserAPI,
+  AuthResponse,
+} from "../../api/auth"
 
 interface AuthState {
-  user_id: string | null;
-  icon: string | null;
-  first_name: string | null;
-  last_name: string | null;
-  loggedIn: boolean;
-  loading: boolean;
-  error: string | null;
-  login: (user_id: string) => void;
-  register: (first_name: string, last_name: string, icon: string) => void;
-  logout: () => void;
-  setError: (error: string | null) => void;
-  setLoading: (loading: boolean) => void;
+  user_id: string | null
+  icon: string | null
+  first_name: string | null
+  last_name: string | null
+  loggedIn: boolean
+  loading: boolean
+  error: string | null
+  login: (user_id: string) => void
+  register: (first_name: string, last_name: string, icon: string) => void
+  logout: () => void
+  setError: (error: string | null) => void
+  setLoading: (loading: boolean) => void
 }
 
 const useAuthStore = create<AuthState>()(
@@ -30,9 +35,9 @@ const useAuthStore = create<AuthState>()(
       loading: false,
       error: null,
       login: async (user_id: string) => {
-        set({ loading: true, error: null });
+        set({ loading: true, error: null })
         try {
-          const data: AuthResponse = await loginUserAPI(user_id);
+          const data: AuthResponse = await loginUserAPI(user_id)
           set({
             user_id: data.user_id,
             icon: data.icon,
@@ -41,15 +46,19 @@ const useAuthStore = create<AuthState>()(
             loggedIn: data.loggedIn,
             loading: false,
             error: null,
-          });
+          })
         } catch (error: any) {
-          set({ error: error.message, loading: false });
+          set({ error: error.message, loading: false })
         }
       },
       register: async (first_name: string, last_name: string, icon: string) => {
-        set({ loading: true, error: null });
+        set({ loading: true, error: null })
         try {
-          const data: AuthResponse = await registerUserAPI(first_name, last_name, icon);
+          const data: AuthResponse = await registerUserAPI(
+            first_name,
+            last_name,
+            icon,
+          )
           set({
             user_id: data.user_id,
             icon: data.icon,
@@ -58,16 +67,16 @@ const useAuthStore = create<AuthState>()(
             loggedIn: data.loggedIn,
             loading: false,
             error: null,
-          });
+          })
         } catch (error: any) {
-          set({ error: error.message, loading: false });
+          set({ error: error.message, loading: false })
         }
       },
       logout: async () => {
-        const user_id = get().user_id;
+        const user_id = get().user_id
         if (user_id) {
           try {
-            await logoutUserAPI(user_id);
+            await logoutUserAPI(user_id)
             set({
               user_id: null,
               icon: null,
@@ -76,9 +85,9 @@ const useAuthStore = create<AuthState>()(
               loggedIn: false,
               loading: false,
               error: null,
-            });
+            })
           } catch (error: any) {
-            console.error("Logout failed", error);
+            console.error("Logout failed", error)
           }
         }
       },
@@ -86,9 +95,9 @@ const useAuthStore = create<AuthState>()(
       setLoading: (loading) => set({ loading }),
     }),
     {
-      name: 'auth-storage',
-    }
-  )
-);
+      name: "auth-storage",
+    },
+  ),
+)
 
-export default useAuthStore;
+export default useAuthStore

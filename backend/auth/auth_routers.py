@@ -12,6 +12,7 @@ from pydantic import ValidationError
 router = APIRouter()
 logger = logging.getLogger(__name__)
 
+
 @router.post("/register")
 async def post_user(user: schemas.CreateUser, db: Session = Depends(get_db)):
     try:
@@ -27,7 +28,7 @@ async def post_user(user: schemas.CreateUser, db: Session = Depends(get_db)):
             }
         )
         return response
-    
+
     except ValidationError as e:
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
@@ -41,8 +42,11 @@ async def post_user(user: schemas.CreateUser, db: Session = Depends(get_db)):
             detail=str(e),
         )
 
+
 @router.post("/login")
-async def login_user(login_request: schemas.LoginRequest, db: Session = Depends(get_db)):
+async def login_user(
+    login_request: schemas.LoginRequest, db: Session = Depends(get_db)
+):
     try:
         user_id = login_request.user_id
         db_user = crud.retrieve_user_by_id(db, user_id=user_id)
@@ -80,8 +84,11 @@ async def login_user(login_request: schemas.LoginRequest, db: Session = Depends(
             detail=str(e),
         )
 
+
 @router.post("/logout")
-async def logout_user(login_request: schemas.LoginRequest, db: Session = Depends(get_db)):
+async def logout_user(
+    login_request: schemas.LoginRequest, db: Session = Depends(get_db)
+):
     try:
         user_id = login_request.user_id
         db_user = crud.retrieve_user_by_id(db, user_id=user_id)
