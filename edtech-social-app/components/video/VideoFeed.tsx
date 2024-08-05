@@ -1,7 +1,9 @@
-//edtech-social-app\components\VideoFeed.tsx
+// edtech-social-app/components/video/VideoFeed.tsx
+
 import VideoPost from "./VideoPost"
-import { useEffect } from "react";
-import {useVideoStore} from  "../../zustand/stores/videoStore";
+import { useEffect } from "react"
+import useVideoStore from "../../zustand/store/videoStore"
+import useAuthStore from "../../zustand/store/authStore"
 
 const VideoFeed: React.FC = () => {
   const { loading, videos, error, fetchVideos } = useVideoStore((state) => ({
@@ -9,17 +11,17 @@ const VideoFeed: React.FC = () => {
     videos: state.videos,
     error: state.error,
     fetchVideos: state.fetchVideos,
-  }));
+  }))
+  const { user_id } = useAuthStore()
 
-  const username = '1'; // Adjust based on how you get the username
-
-  // Fetch videos for user
   useEffect(() => {
-    fetchVideos(username);
-  }, [fetchVideos, username]);
+    if (user_id) {
+      fetchVideos(user_id)
+    }
+  }, [fetchVideos, user_id])
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  if (loading) return <div>Loading...</div>
+  if (error) return <div>Error: {error}</div>
 
   return (
     <div className="container mx-auto py-8">
@@ -38,13 +40,13 @@ const VideoFeed: React.FC = () => {
                 description={video.description}
                 video_url={video.video_url}
               />
-            );
+            )
           }
-          return null;
+          return null
         })}
       </div>
     </div>
-  );
+  )
 }
 
 export default VideoFeed

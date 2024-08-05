@@ -1,4 +1,5 @@
 // models/schemas.ts
+// MAYBE NOT NEEDED
 export interface CreateUser {
   email: string
   username: string

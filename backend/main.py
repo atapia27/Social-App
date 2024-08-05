@@ -2,7 +2,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from backend.auth.auth_routers import router as auth_router
-from backend.users.user_routers import router as user_router
+# dont need user router
+# from backend.users.user_routers import router as user_router
 
 app = FastAPI()
 
@@ -21,4 +22,4 @@ app.add_middleware(
 
 # Include routers
 app.include_router(auth_router, prefix="/auth", tags=["auth"])
-app.include_router(user_router, prefix="/users", tags=["users"])
+# app.include_router(user_router, prefix="/users", tags=["users"])

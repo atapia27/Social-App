@@ -1,25 +1,27 @@
-//edtech-social-app\components\CreateVideoForm.tsx
+// edtech-social-app/components/video/CreateVideoForm.tsx
+
 import React, { useState } from "react"
 import { FiCornerDownRight } from "react-icons/fi"
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch } from "../../redux/store"
-import {authSuccess} from "../../redux/auth/authSlice"; // Adjust the import path as necessary
+import useAuthStore from  "../../zustand/store/authStore"
+import useVideoStore from "../../zustand/store/videoStore"
 
 const CreateVideoForm: React.FC = () => {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [videoUrl, setVideoUrl] = useState("");
-  const dispatch = useDispatch<AppDispatch>();
-  const user_id = useSelector(authSuccess); // Access user_id from Redux state
-
+  const [title, setTitle] = useState("")
+  const [description, setDescription] = useState("")
+  const [videoUrl, setVideoUrl] = useState("")
+  const { user_id } = useAuthStore()
+  const { addVideo } = useVideoStore()
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const videoData = { user_id: user_id.payload.user_id, description: description, video_url: videoUrl, title: title };
-    setTitle("");
-    setDescription("");
-    setVideoUrl("");
-  };
+    e.preventDefault()
+    if (user_id) {
+      const videoData = { user_id, description, video_url: videoUrl, title }
+      addVideo(videoData)
+      setTitle("")
+      setDescription("")
+      setVideoUrl("")
+    }
+  }
 
   return (
     <form

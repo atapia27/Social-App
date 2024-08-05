@@ -1,12 +1,17 @@
-# backend\schemas.py
+# backend/schemas.py
+
 from pydantic import BaseModel
 
-
 class User(BaseModel):
-    email: str
+    id: str
     first_name: str
     last_name: str
-    username: str
+    icon: str
+    logged_in: bool
+
+class CreateUser(BaseModel):
+    first_name: str
+    last_name: str
     icon: str
 
 class CreateVideo(BaseModel):
@@ -25,12 +30,5 @@ class CreateComment(BaseModel):
     content: str
     user_id: str
 
-
-# New addition
-class TokenData(BaseModel):
-    email: str
-
-
-# New addition
 class LoginRequest(BaseModel):
-    username: str
+    user_id: str

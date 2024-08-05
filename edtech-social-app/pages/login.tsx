@@ -1,25 +1,22 @@
 // edtech-social-app/pages/login.tsx
 
 import React, { useState } from "react"
-import { useDispatch } from "react-redux"
 import { useRouter } from "next/router"
-import { loginUser } from "../redux/auth/authSlice"
-import { AppDispatch } from "../redux/store"
+import useAuthStore from "../zustand/store/authStore"
 
 const Login = () => {
-  const [username, setUsername] = useState("")
-  const dispatch = useDispatch<AppDispatch>()
+  const [user_id, setUserId] = useState("")
+  const { login } = useAuthStore()
   const router = useRouter()
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    dispatch(loginUser(username))
-      .then(() => {
-        router.push("/") // Redirect to home or another page upon successful login
-      })
-      .catch((error) => {
-        console.error("Login failed", error)
-      })
+    try {
+      await login(user_id)
+      router.push("/") 
+    } catch (error) {
+      console.error("Login failed", error)
+    }
   }
 
   return (
@@ -27,16 +24,16 @@ const Login = () => {
       <form onSubmit={handleSubmit} className="w-full max-w-lg space-y-4">
         <div>
           <label
-            htmlFor="username"
+            htmlFor="user_id"
             className="block text-sm font-medium text-gray-700"
           >
-            Username:
+            User ID:
           </label>
           <input
             type="text"
-            id="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            id="user_id"
+            value={user_id}
+            onChange={(e) => setUserId(e.target.value)}
             className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
             required
           />

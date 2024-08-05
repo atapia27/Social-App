@@ -1,14 +1,15 @@
-// edtech-social-app\components\VideoPost.tsx
-import React, { useState } from "react";
-import ReactPlayer from "react-player";
-import { FiThumbsUp, FiMessageSquare, FiShare } from "react-icons/fi";
-import CommentForm from "../CommentForm";
+// edtech-social-app/components/video/VideoPost.tsx
+
+import React, { useState } from "react"
+import ReactPlayer from "react-player"
+import { FiThumbsUp, FiMessageSquare, FiShare } from "react-icons/fi"
+import CommentForm from "../CommentForm"
 
 interface VideoPostProps {
-  video_id: string;
-  description: string;
-  video_url: string;
-  title: string;
+  video_id: string
+  description: string
+  video_url: string
+  title: string
 }
 
 const VideoPost: React.FC<VideoPostProps> = ({
@@ -17,26 +18,26 @@ const VideoPost: React.FC<VideoPostProps> = ({
   video_url,
   title,
 }) => {
-  const [showCommentForm, setShowCommentForm] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [valid, setValid] = useState(true);
+  const [showCommentForm, setShowCommentForm] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [valid, setValid] = useState(true)
 
   const toggleCommentForm = () => {
-    setShowCommentForm(!showCommentForm);
-  };
+    setShowCommentForm(!showCommentForm)
+  }
 
   // When URL is invalid, VideoPost component will not render
   const handleError = () => {
-    setLoading(false);
-    setValid(false);
-  };
+    setLoading(false)
+    setValid(false)
+  }
 
   // When video is ready, loading state will be set to false
   const handleReady = () => {
-    setLoading(false);
-  };
+    setLoading(false)
+  }
 
-  if (!valid) return null;
+  if (!valid) return null
 
   return (
     <div className="mx-auto mb-8 w-[55%] rounded-lg bg-white shadow-md">
@@ -79,7 +80,7 @@ const VideoPost: React.FC<VideoPostProps> = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default VideoPost;
+export default VideoPost

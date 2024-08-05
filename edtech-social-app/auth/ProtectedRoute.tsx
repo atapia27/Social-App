@@ -1,34 +1,35 @@
-// edtech-social-app\auth\ProtectedRoute.tsx
+// edtech-social-app/auth/ProtectedRoute.tsx
+
 import React, { useEffect, useState } from "react"
-import { useSelector, useDispatch } from "react-redux"
 import { useRouter } from "next/router"
-import { selectAuthToken, checkAuthToken } from "../redux/auth/authSlice"
-import { AppDispatch } from "../redux/store"
+import useAuthStore from "../zustand/store/authStore"
 
 interface ProtectedRouteProps {
   children: React.ReactNode
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  const dispatch = useDispatch<AppDispatch>()
-  const token = useSelector(selectAuthToken)
+  const { user_id, loggedIn, login } = useAuthStore()
   const router = useRouter()
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
     setMounted(true)
-    if (!token) {
-      dispatch(checkAuthToken())
+    if (!loggedIn) {
+      const storedUserId = localStorage.getItem("user_id")
+      if (storedUserId) {
+        login(storedUserId)
+      }
     }
-  }, [dispatch, token])
+  }, [loggedIn, login])
 
   useEffect(() => {
-    if (mounted && !token) {
+    if (mounted && !loggedIn) {
       router.push("/register")
     }
-  }, [mounted, token, router])
+  }, [mounted, loggedIn, router])
 
-  if (!mounted || !token) {
+  if (!mounted || !loggedIn) {
     return null // or a loading spinner, etc.
   }
 

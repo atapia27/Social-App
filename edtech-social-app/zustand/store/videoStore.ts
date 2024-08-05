@@ -1,4 +1,4 @@
-// edtech-social-app/store/videoStore.ts
+// edtech-social-app\zustand\stores\videoStore.ts
 
 import { create } from "zustand"
 import {
@@ -21,7 +21,7 @@ interface VideoActions {
   ) => void
 }
 
-export const useVideoStore = create<VideoState & VideoActions>()((set) => ({
+const useVideoStore = create<VideoState & VideoActions>()((set) => ({
   videos: [],
   loading: false,
   error: null,
@@ -45,3 +45,5 @@ export const useVideoStore = create<VideoState & VideoActions>()((set) => ({
     }
   },
 }))
+
+export default useVideoStore;
