@@ -73,7 +73,7 @@ const Register = () => {
             required
           />
         </div>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2 self-center justify-center">
           {icons.map((iconOption) => (
             <button
               key={iconOption.name}
