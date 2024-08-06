@@ -1,6 +1,7 @@
 // edtech-social-app/components/video/VideoFeed.tsx
 
 import VideoPost from "./VideoPost"
+import CreateVideoForm from "./CreateVideoForm"
 import { useEffect } from "react"
 import useVideoStore from "../../zustand/store/videoStore"
 import useAuthStore from "../../zustand/store/authStore"
@@ -25,7 +26,8 @@ const VideoFeed: React.FC = () => {
 
   return (
     <div className="container mx-auto py-8">
-      <div className="grid gap-8 xl:grid-cols-1">
+      <CreateVideoForm />
+        <div className="grid gap-8 xl:grid-cols-1">
         {videos.map((video) => {
           if (
             video.title.length > 0 &&
