@@ -1,7 +1,7 @@
 [build]
-  base = ""
+  base = "edtech-social-app"
   command = "npm run build"
-  publish = ".next"
+  publish = "edtech-social-app/.next"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
