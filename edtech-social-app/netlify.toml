@@ -1,0 +1,8 @@
+[build]
+  publish = "build" # Adjust to your build directory if different
+  command = "npm run build" # Adjust if your build command is different
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
