@@ -1,7 +1,7 @@
 [build]
-  base = "edtech-social-app"
+  base = "edtech-social-app"  # Specify the subdirectory if your Next.js app is not in the root
   command = "npm run build"
-  publish = "edtech-social-app/.next"
+  publish = ".next"  # This should be relative to the `base` directory
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
