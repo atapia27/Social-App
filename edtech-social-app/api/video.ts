@@ -1,5 +1,3 @@
-// edtech-social-app/api/video.ts
-
 export interface GetVideosResponse {
   created_at: string
   video_url: string
@@ -17,9 +15,11 @@ export interface PostVideo {
   title: string
 }
 
+const API_BASE_URL = 'https://social-app-y6hc.onrender.com'; // Replace with your FastAPI backend URL
+
 export const fetchUserVideosAPI = async (user_id: string) => {
   const response = await fetch(
-    `https://take-home-assessment-423502.uc.r.appspot.com/api/videos/?user_id=${user_id}`,
+    `${API_BASE_URL}/videos/${user_id}`,
   )
   if (response.ok) {
     const data = await response.json()
@@ -35,7 +35,7 @@ export const fetchUserVideosAPI = async (user_id: string) => {
 
 export const addVideoAPI = async (video: PostVideo) => {
   const response = await fetch(
-    "https://take-home-assessment-423502.uc.r.appspot.com/api/videos/",
+    `${API_BASE_URL}/videos`,
     {
       method: "POST",
       headers: {
