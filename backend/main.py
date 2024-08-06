@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 from backend.auth.auth_routers import router as auth_router
+from backend.videos.video_routers import router as video_router
 
 # Initialize FastAPI app
 app = FastAPI()
@@ -25,6 +26,7 @@ app.add_middleware(
 
 # Include routers
 app.include_router(auth_router, prefix="/auth", tags=["auth"])
+app.include_router(video_router, prefix="/api")
 
 # Entry point for Uvicorn
 if __name__ == "__main__":
