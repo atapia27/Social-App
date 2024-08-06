@@ -1,5 +1,3 @@
-// edtech-social-app/components/video/VideoFeed.tsx
-
 import VideoPost from "./VideoPost"
 import CreateVideoForm from "./CreateVideoForm"
 import { useEffect } from "react"
@@ -14,8 +12,8 @@ const VideoFeed: React.FC = () => {
     fetchVideos: state.fetchVideos,
   }))
   const { user_id } = useAuthStore((state) => state) // Fetch the user ID from auth store
-  // const dislpay_videos_from_user = "1" // Hardcoded user_id for testing
   const dislpay_videos_from_user = user_id // Use the user_id from auth store
+  
   useEffect(() => {
     if (dislpay_videos_from_user) {
       fetchVideos(dislpay_videos_from_user)
@@ -43,6 +41,7 @@ const VideoFeed: React.FC = () => {
                 description={video.description}
                 video_url={video.video_url}
                 num_comments={video.num_comments}
+                user_id={video.user_id} // Pass user_id to VideoPost
               />
             )
           }

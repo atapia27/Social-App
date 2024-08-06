@@ -1,5 +1,3 @@
-// edtech-social-app/components/video/VideoPost.tsx
-
 import React, { useState } from "react"
 import ReactPlayer from "react-player"
 import { FiThumbsUp, FiMessageSquare, FiShare } from "react-icons/fi"
@@ -12,6 +10,7 @@ interface VideoPostProps {
   video_url: string
   title: string
   num_comments: number
+  user_id: string // New prop for user ID
 }
 
 const VideoPost: React.FC<VideoPostProps> = ({
@@ -20,6 +19,7 @@ const VideoPost: React.FC<VideoPostProps> = ({
   video_url,
   title,
   num_comments,
+  user_id, // Destructure user_id
 }) => {
   const [showCommentForm, setShowCommentForm] = useState(false)
   const [loading, setLoading] = useState(true)
@@ -49,6 +49,9 @@ const VideoPost: React.FC<VideoPostProps> = ({
 
   return (
     <div className="mx-auto mb-8 w-[55%] rounded-lg bg-white shadow-md">
+      <div className="p-4">
+        <h3 className="text-md font-medium text-gray-700">{user_id}</h3> {/* Display user ID */}
+      </div>
       <div className="relative">
         {loading && (
           <div className="absolute inset-0 flex items-center justify-center bg-gray-200">
