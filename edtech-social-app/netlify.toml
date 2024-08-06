@@ -1,8 +1,6 @@
 [build]
-  publish = "build" # Adjust to your build directory if different
-  command = "npm run build" # Adjust if your build command is different
+  command = "npm run build"
+  publish = ".next"
 
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
