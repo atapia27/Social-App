@@ -11,6 +11,7 @@ app = FastAPI()
 # CORS middleware to allow requests from your Next.js frontend
 origins = [
     "http://localhost:3000",
+    "https://social-app-y6hc.onrender.com",  # Add your render URL here
 ]
 
 app.add_middleware(
