@@ -1,5 +1,3 @@
-// edtech-social-app/auth/ProtectedRoute.tsx
-
 import React, { useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import useAuthStore from "../zustand/store/authStore"
@@ -30,7 +28,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   }, [mounted, loggedIn, router])
 
   if (!mounted || !loggedIn) {
-    return null // or a loading spinner, etc.
+    return <div>Loading...</div> // Show a loading indicator while checking authentication
   }
 
   return <>{children}</>

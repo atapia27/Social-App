@@ -27,7 +27,7 @@ const VideoFeed: React.FC = () => {
   return (
     <div className="container mx-auto py-8">
       <CreateVideoForm />
-        <div className="grid gap-8 xl:grid-cols-1">
+      <div className="grid gap-8 xl:grid-cols-1">
         {videos.map((video) => {
           if (
             video.title.length > 0 &&

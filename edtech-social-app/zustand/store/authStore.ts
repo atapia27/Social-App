@@ -1,5 +1,3 @@
-// edtech-social-app/zustand/store/authStore.ts
-
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
 import {
@@ -48,6 +46,7 @@ const useAuthStore = create<AuthState>()(
             error: null,
           })
         } catch (error: any) {
+          console.error("Login error:", error)
           set({ error: error.message, loading: false })
         }
       },
@@ -69,6 +68,7 @@ const useAuthStore = create<AuthState>()(
             error: null,
           })
         } catch (error: any) {
+          console.error("Register error:", error)
           set({ error: error.message, loading: false })
         }
       },
