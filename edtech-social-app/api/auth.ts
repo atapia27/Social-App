@@ -13,7 +13,7 @@ export const registerUserAPI = async (
   last_name: string,
   icon: string,
 ): Promise<AuthResponse> => {
-  const response = await fetch("http://localhost:8000/auth/register", {
+  const response = await fetch("https://social-app-y6hc.onrender.com/auth/register", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -30,7 +30,7 @@ export const registerUserAPI = async (
 }
 
 export const loginUserAPI = async (user_id: string): Promise<AuthResponse> => {
-  const response = await fetch("http://localhost:8000/auth/login", {
+  const response = await fetch("https://social-app-y6hc.onrender.com/auth/login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -53,7 +53,7 @@ export const loginUserAPI = async (user_id: string): Promise<AuthResponse> => {
 }
 
 export const logoutUserAPI = async (user_id: string): Promise<void> => {
-  await fetch("http://localhost:8000/auth/logout", {
+  await fetch("https://social-app-y6hc.onrender.com/auth/logout", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
