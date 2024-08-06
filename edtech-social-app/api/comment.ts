@@ -1,3 +1,4 @@
+// edtech-social-app\api\comment.ts
 export interface Comment {
   id: string
   created_at: string

@@ -17,23 +17,27 @@ export interface PostVideo {
 
 const API_BASE_URL = 'https://social-app-y6hc.onrender.com/api'; // Your FastAPI backend URL
 
-export const fetchUserVideosAPI = async (user_id: string) => {
+export const fetchUserVideosAPI = async (user_id: string): Promise<GetVideosResponse[]> => {
+  console.log(`Fetching videos for user_id: ${user_id}`)
   const response = await fetch(
     `${API_BASE_URL}/videos/${user_id}`,
   )
   if (response.ok) {
     const data = await response.json()
+    console.log("Videos fetched successfully:", data)
     return data.videos.map((video: GetVideosResponse) => ({
       ...video,
       id: video.id, // Use video.id instead of user_id
     }))
   } else {
     const error = await response.json()
+    console.error("Failed to fetch videos:", error)
     throw new Error(error.message)
   }
 }
 
-export const addVideoAPI = async (video: PostVideo) => {
+export const addVideoAPI = async (post_info: PostVideo) => {
+  console.log(`Adding video: ${JSON.stringify(post_info)}`)
   const response = await fetch(
     `${API_BASE_URL}/videos`,
     {
@@ -41,19 +45,14 @@ export const addVideoAPI = async (video: PostVideo) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(video),
+      body: JSON.stringify(post_info),
     },
   )
   if (response.ok) {
-    const data = await response.json()
-    return {
-      ...video,
-      created_at: data.created_at,
-      num_comments: data.num_comments,
-      id: data.id,
-    }
+    console.log("Video added successfully")
   } else {
     const error = await response.json()
-    throw new Error(error.message)
+    console.error("Failed to add video:", error)
+    throw new Error(error.detail || "Failed to add video")
   }
 }

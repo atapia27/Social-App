@@ -1,25 +1,38 @@
-// edtech-social-app/components/video/CreateVideoForm.tsx
-
 import React, { useState } from "react"
 import { FiCornerDownRight } from "react-icons/fi"
 import useAuthStore from "../../zustand/store/authStore"
 import useVideoStore from "../../zustand/store/videoStore"
+import { PostVideo } from "../../api/video"
 
 const CreateVideoForm: React.FC = () => {
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
   const [videoUrl, setVideoUrl] = useState("")
   const { user_id } = useAuthStore()
-  const { addVideo } = useVideoStore()
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const { postVideo: addVideo } = useVideoStore()
+  
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (user_id) {
-      const videoData = { user_id, description, video_url: videoUrl, title }
-      addVideo(videoData)
-      setTitle("")
-      setDescription("")
-      setVideoUrl("")
+      const post_info: PostVideo = {
+        user_id: user_id,
+        description: description,
+        video_url: videoUrl,
+        title: title,
+      }
+      try {
+        console.log("Submitting video:", post_info)
+        await addVideo(post_info)
+        console.log("Video submitted successfully")
+        // Clear the form fields after submission
+        setTitle("")
+        setDescription("")
+        setVideoUrl("")
+      } catch (error) {
+        console.error("Error submitting video:", error)
+      }
+    } else {
+      console.error("User ID is not available")
     }
   }
 

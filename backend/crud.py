@@ -34,3 +34,6 @@ def retrieve_user_by_id(db: Session, user_id: str):
 
 def retrieve_users(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.User).offset(skip).limit(limit).all()
+
+def retrive_all_users_id_and_icon(db: Session):
+    return db.query(models.User.id, models.User.icon).all()

@@ -1,3 +1,5 @@
+// edtech-social-app\components\comment\CommentForm.tsx
+
 import React, { useState } from "react"
 import useCommentStore from "../../zustand/store/commentStore"
 import { FiSend } from "react-icons/fi"

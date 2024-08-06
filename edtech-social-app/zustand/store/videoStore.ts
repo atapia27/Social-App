@@ -1,5 +1,3 @@
-// edtech-social-app\zustand\stores\videoStore.ts
-
 import { create } from "zustand"
 import {
   fetchUserVideosAPI,
@@ -16,9 +14,7 @@ interface VideoState {
 
 interface VideoActions {
   fetchVideos: (user_id: string) => void
-  addVideo: (
-    video: Omit<GetVideosResponse, "created_at" | "num_comments" | "id">,
-  ) => void
+  postVideo: (post_info: PostVideo) => void
 }
 
 const useVideoStore = create<VideoState & VideoActions>()((set) => ({
@@ -32,15 +28,22 @@ const useVideoStore = create<VideoState & VideoActions>()((set) => ({
       const videos = await fetchUserVideosAPI(user_id)
       set({ videos, loading: false })
     } catch (error: any) {
+      console.error(`Failed to fetch videos: ${error.message}`)
       set({ error: error.message, loading: false })
     }
   },
-  addVideo: async (video) => {
+  postVideo: async (post_info: PostVideo) => {
+    console.log(`postVideo called with post_info: ${JSON.stringify(post_info)}`)
     set({ loading: true, error: null })
     try {
-      const newVideo = await addVideoAPI(video)
-      set((state) => ({ videos: [...state.videos, newVideo], loading: false }))
+      await addVideoAPI(post_info)
+      console.log("Video posted successfully")
+      // Fetch updated videos list after posting a new video
+      const updatedVideos = await fetchUserVideosAPI(post_info.user_id)
+      console.log(`Updated videos fetched: ${JSON.stringify(updatedVideos)}`)
+      set({ videos: updatedVideos, loading: false, error: null })
     } catch (error: any) {
+      console.error(`Failed to post video: ${error.message}`)
       set({ error: error.message, loading: false })
     }
   },
