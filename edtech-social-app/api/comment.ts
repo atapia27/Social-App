@@ -10,7 +10,7 @@ export interface CommentsResponse {
   comments: Comment[]
 }
 
-const API_BASE_URL = 'https://social-app-y6hc.onrender.com'; // Replace with your FastAPI backend URL
+const API_BASE_URL = 'https://social-app-y6hc.onrender.com/api'; // Your FastAPI backend URL
 
 export const fetchCommentsAPI = async (
   video_id: string,
