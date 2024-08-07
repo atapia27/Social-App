@@ -1,3 +1,4 @@
+//edtech-social-app\components\video\VideoFeed.tsx
 import VideoPost from "./VideoPost"
 import CreateVideoForm from "./CreateVideoForm"
 import { useEffect } from "react"
@@ -5,20 +6,17 @@ import useVideoStore from "../../zustand/store/videoStore"
 import useAuthStore from "../../zustand/store/authStore"
 
 const VideoFeed: React.FC = () => {
-  const { loading, videos, error, fetchVideos } = useVideoStore((state) => ({
+  const { loading, videos, error, fetchAllVideos } = useVideoStore((state) => ({
     loading: state.loading,
     videos: state.videos,
     error: state.error,
-    fetchVideos: state.fetchVideos,
+    fetchAllVideos: state.fetchAllVideos,
   }))
   const { user_id } = useAuthStore((state) => state) // Fetch the user ID from auth store
-  const dislpay_videos_from_user = user_id // Use the user_id from auth store
   
   useEffect(() => {
-    if (dislpay_videos_from_user) {
-      fetchVideos(dislpay_videos_from_user)
-    }
-  }, [fetchVideos, dislpay_videos_from_user])
+    fetchAllVideos()
+  }, [fetchAllVideos])
 
   if (loading) return <div>Loading...</div>
   if (error) return <div>Error: {error}</div>
@@ -53,3 +51,4 @@ const VideoFeed: React.FC = () => {
 }
 
 export default VideoFeed
+

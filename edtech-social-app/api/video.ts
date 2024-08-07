@@ -1,3 +1,4 @@
+//edtech-social-app\api\video.ts
 export interface GetVideosResponse {
   created_at: string
   video_url: string
@@ -32,6 +33,23 @@ export const fetchUserVideosAPI = async (user_id: string): Promise<GetVideosResp
   } else {
     const error = await response.json()
     console.error("Failed to fetch videos:", error)
+    throw new Error(error.message)
+  }
+}
+
+export const fetchAllVideosAPI = async (): Promise<GetVideosResponse[]> => {
+  console.log(`Fetching all videos`)
+  const response = await fetch(`${API_BASE_URL}/videos/all`)
+  if (response.ok) {
+    const data = await response.json()
+    console.log("All videos fetched successfully:", data)
+    return data.videos.map((video: GetVideosResponse) => ({
+      ...video,
+      id: video.id, // Use video.id instead of user_id
+    }))
+  } else {
+    const error = await response.json()
+    console.error("Failed to fetch all videos:", error)
     throw new Error(error.message)
   }
 }

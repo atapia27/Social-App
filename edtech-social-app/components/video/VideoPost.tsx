@@ -60,7 +60,7 @@ const VideoPost: React.FC<VideoPostProps> = ({
         )}
         <ReactPlayer
           url={video_url}
-          className="w-full rounded-t-lg"
+          className="w-full rounded-t-lg px-2"
           width="100%"
           height="315px"
           controls
