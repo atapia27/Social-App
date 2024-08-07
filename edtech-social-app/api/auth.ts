@@ -8,7 +8,7 @@ export interface AuthResponse {
   loggedIn: boolean // Add loggedIn property
 }
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL_AUTH;
 
 export const registerUserAPI = async (
   first_name: string,
