@@ -8,13 +8,15 @@ export interface AuthResponse {
   loggedIn: boolean // Add loggedIn property
 }
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 export const registerUserAPI = async (
   first_name: string,
   last_name: string,
   icon: string,
 ): Promise<AuthResponse> => {
   const response = await fetch(
-    "http://localhost:8000/auth/register",
+    `${API_BASE_URL}/auth/register`,
     {
       method: "POST",
       headers: {
@@ -34,7 +36,7 @@ export const registerUserAPI = async (
 
 export const loginUserAPI = async (user_id: string): Promise<AuthResponse> => {
   const response = await fetch(
-    "http://localhost:8000/auth/login",
+    `${API_BASE_URL}/auth/login`,
     {
       method: "POST",
       headers: {
@@ -59,7 +61,7 @@ export const loginUserAPI = async (user_id: string): Promise<AuthResponse> => {
 }
 
 export const logoutUserAPI = async (user_id: string): Promise<void> => {
-  await fetch("http://localhost:8000/auth/logout", {
+  await fetch(`${API_BASE_URL}/auth/logout`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
