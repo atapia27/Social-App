@@ -1,4 +1,3 @@
-//edtech-social-app\api\video.ts
 export interface GetVideosResponse {
   created_at: string
   video_url: string
@@ -16,7 +15,8 @@ export interface PostVideo {
   title: string
 }
 
-const API_BASE_URL = 'https://social-app-y6hc.onrender.com/api'; // Your FastAPI backend URL
+const API_BASE_URL = 'https://social-app-y6hc.onrender.com/api'; // PROD: Your FastAPI backend URL
+// const API_BASE_URL = 'http://localhost:8000/api'; // DEV: Your FastAPI backend URL
 
 export const fetchUserVideosAPI = async (user_id: string): Promise<GetVideosResponse[]> => {
   console.log(`Fetching videos for user_id: ${user_id}`)

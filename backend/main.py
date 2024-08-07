@@ -1,10 +1,14 @@
-# backend\main.py
 import os
+import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 from backend.auth.auth_routers import router as auth_router
 from backend.videos.video_routers import router as video_router
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # Initialize FastAPI app
 app = FastAPI()

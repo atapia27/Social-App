@@ -12,7 +12,6 @@ const VideoFeed: React.FC = () => {
     error: state.error,
     fetchAllVideos: state.fetchAllVideos,
   }))
-  const { user_id } = useAuthStore((state) => state) // Fetch the user ID from auth store
   
   useEffect(() => {
     fetchAllVideos()
@@ -51,4 +50,3 @@ const VideoFeed: React.FC = () => {
 }
 
 export default VideoFeed
-
